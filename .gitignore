@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+contracts/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/.vite/
+contracts/build/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Claude / MCP local config (do not commit)
+.claude/
+.mcp.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*

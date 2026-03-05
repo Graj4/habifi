@@ -1,0 +1,457 @@
+{
+    "functions": [
+        {
+            "name": "setAddresses",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "pillContractAddress",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "badgeContractAddress",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "createHabit",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                },
+                {
+                    "name": "frequency",
+                    "type": "STRING"
+                },
+                {
+                    "name": "stakeAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "checkIn",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "newStreakCount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "breakStreak",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "taxAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "claimYield",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "claimed",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "sponsor",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "challenge",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "friendAddress",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "multiplier",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "baseAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "acceptChallenge",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getChallengeInfo",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "fromAddr",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "toAddr",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "multiplier",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "baseAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "expiry",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "status",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getIncomingChallenges",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "user",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "challengeIds",
+                    "type": "BYTES32"
+                }
+            ]
+        },
+        {
+            "name": "cancelChallenge",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getLeaderboard",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "addresses",
+                    "type": "BYTES32"
+                },
+                {
+                    "name": "streaks",
+                    "type": "BYTES32"
+                }
+            ]
+        },
+        {
+            "name": "getMotoMiles",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "user",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "miles",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getUserHabits",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "user",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "habitIds",
+                    "type": "BYTES32"
+                }
+            ]
+        },
+        {
+            "name": "getHabitInfo",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "streak",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "lastCheckIn",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "stakeAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "frequency",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "isActive",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getHabitName",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                }
+            ]
+        },
+        {
+            "name": "getStats",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "totalStaked",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "totalStreakDays",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "totalHabits",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getPendingYield",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "user",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "pending",
+                    "type": "UINT256"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "HabitCreated",
+            "values": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "stakeAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "CheckIn",
+            "values": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "newStreak",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "StreakBroken",
+            "values": [
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "taxAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "returned",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "YieldClaimed",
+            "values": [
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "Sponsored",
+            "values": [
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "ChallengeIssued",
+            "values": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "friend",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "multiplier",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "ChallengeAccepted",
+            "values": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "streaksats-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@btc-vision/bitcoin": "7.0.0-rc.6",
+    "@btc-vision/transaction": "1.8.0-rc.9",
+    "@btc-vision/walletconnect": "latest",
+    "opnet": "1.8.1-rc.15",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "typescript": "5.5.3",
+    "vite": "5.3.4"
+  }
+}

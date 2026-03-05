@@ -1,0 +1,35 @@
+{
+  "targets": {
+    "streaksats": {
+      "entries": ["src/StreakSats/index.ts"],
+      "outFile": "build/StreakSats.wasm",
+      "use": ["abort=src/StreakSats/index/abort"]
+    },
+    "streakbadge": {
+      "entries": ["src/StreakBadge/index.ts"],
+      "outFile": "build/StreakBadge.wasm",
+      "use": ["abort=src/StreakBadge/index/abort"]
+    }
+  },
+  "options": {
+    "sourceMap": false,
+    "optimizeLevel": 3,
+    "shrinkLevel": 1,
+    "converge": true,
+    "noAssert": false,
+    "enable": [
+      "sign-extension",
+      "mutable-globals",
+      "nontrapping-f2i",
+      "bulk-memory",
+      "simd",
+      "reference-types",
+      "multi-value"
+    ],
+    "runtime": "stub",
+    "memoryBase": 0,
+    "initialMemory": 1,
+    "exportStart": "start",
+    "transform": "@btc-vision/opnet-transform"
+  }
+}

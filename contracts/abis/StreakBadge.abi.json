@@ -1,0 +1,59 @@
+{
+    "functions": [
+        {
+            "name": "setMinter",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "minterAddress",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "mintBadge",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "recipient",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "habitId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "streak",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "tokenId",
+                    "type": "UINT256"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "BadgeMinted",
+            "values": [
+                {
+                    "name": "tokenId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "streak",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        }
+    ]
+}

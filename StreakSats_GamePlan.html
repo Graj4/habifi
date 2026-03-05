@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>StreakSats — Contest Game Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --orange: #F7931A;
+    --orange-light: #FFF4E6;
+    --orange-dark: #C96D00;
+    --dark: #0D0D0D;
+    --dark2: #1A1A1A;
+    --dark3: #252525;
+    --green: #00C896;
+    --green-light: #E6FFF8;
+    --red: #FF4C4C;
+    --red-light: #FFF0F0;
+    --blue: #3B82F6;
+    --blue-light: #EFF6FF;
+    --purple: #8B5CF6;
+    --purple-light: #F5F3FF;
+    --gray: #6B7280;
+    --gray-light: #F9FAFB;
+    --border: #E5E7EB;
+    --text: #111827;
+    --text-muted: #6B7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #FFFFFF;
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    background: var(--dark);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(247,147,26,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,200,150,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cover-inner { position: relative; z-index: 1; max-width: 700px; }
+
+  .cover-badge {
+    display: inline-block;
+    background: rgba(247,147,26,0.15);
+    border: 1px solid rgba(247,147,26,0.4);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .cover h1 {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #F7931A 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-sub {
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 40px;
+    line-height: 1.5;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .cover-meta-item { text-align: center; }
+  .cover-meta-item .label { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 2px; }
+  .cover-meta-item .value { font-size: 18px; font-weight: 700; color: white; margin-top: 4px; }
+  .cover-meta-item .value.orange { color: var(--orange); }
+  .cover-meta-item .value.green { color: var(--green); }
+
+  /* CONTENT */
+  .page { padding: 60px 72px; max-width: 900px; margin: 0 auto; }
+
+  @media print {
+    .page { padding: 40px 56px; }
+    .cover { min-height: auto; padding: 80px 56px; }
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section-num {
+    width: 40px; height: 40px;
+    background: var(--orange);
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+
+  .section-desc { color: var(--text-muted); font-size: 14px; margin-top: 2px; }
+
+  /* PAGE BREAK */
+  .page-break { page-break-before: always; padding-top: 60px; }
+
+  /* CARDS */
+  .card {
+    background: var(--gray-light);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card.orange { background: var(--orange-light); border-color: rgba(247,147,26,0.25); }
+  .card.green { background: var(--green-light); border-color: rgba(0,200,150,0.25); }
+  .card.red { background: var(--red-light); border-color: rgba(255,76,76,0.25); }
+  .card.blue { background: var(--blue-light); border-color: rgba(59,130,246,0.25); }
+  .card.purple { background: var(--purple-light); border-color: rgba(139,92,246,0.25); }
+  .card.dark { background: var(--dark); color: white; border-color: transparent; }
+  .card.dark .card-title { color: var(--orange); }
+  .card.dark p, .card.dark li { color: rgba(255,255,255,0.75); }
+  .card.dark code { background: rgba(255,255,255,0.1); color: #FFD700; }
+
+  /* TWO-COLUMN GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+  /* METRIC CARDS */
+  .metric-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .metric-card .metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .metric-card .metric-value {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: var(--text);
+  }
+
+  .metric-card .metric-value.orange { color: var(--orange); }
+  .metric-card .metric-value.green { color: var(--green); }
+  .metric-card .metric-value.red { color: var(--red); }
+  .metric-card .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* TYPOGRAPHY */
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  p { margin-bottom: 12px; color: var(--text); }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; color: var(--text); }
+  strong { font-weight: 700; }
+
+  /* CODE BLOCKS */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: #F3F4F6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--orange-dark);
+  }
+
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--dark);
+    color: #E5E7EB;
+    padding: 20px 24px;
+    border-radius: 12px;
+    overflow-x: auto;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  pre .comment { color: #6B7280; }
+  pre .keyword { color: #F7931A; }
+  pre .string { color: #00C896; }
+  pre .number { color: #FFD700; }
+  pre .fn { color: #93C5FD; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+  th { background: var(--dark); color: white; padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  th:first-child { border-radius: 10px 0 0 0; }
+  th:last-child { border-radius: 0 10px 0 0; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  .td-orange { color: var(--orange); font-weight: 700; }
+  .td-green { color: var(--green); font-weight: 700; }
+  .td-red { color: var(--red); font-weight: 700; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .badge.orange { background: var(--orange-light); color: var(--orange-dark); border: 1px solid rgba(247,147,26,0.3); }
+  .badge.green { background: var(--green-light); color: #047857; border: 1px solid rgba(0,200,150,0.3); }
+  .badge.red { background: var(--red-light); color: #B91C1C; border: 1px solid rgba(255,76,76,0.3); }
+  .badge.blue { background: var(--blue-light); color: #1D4ED8; border: 1px solid rgba(59,130,246,0.3); }
+  .badge.purple { background: var(--purple-light); color: #6D28D9; border: 1px solid rgba(139,92,246,0.3); }
+
+  /* FLOW DIAGRAM */
+  .flow { display: flex; align-items: flex-start; gap: 0; margin-bottom: 28px; flex-wrap: wrap; }
+  .flow-step {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 0 8px;
+    position: relative;
+  }
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -8px;
+    top: 20px;
+    font-size: 20px;
+    color: var(--orange);
+    font-weight: 700;
+  }
+  .flow-step:last-child::after { display: none; }
+  .flow-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 8px;
+    background: var(--orange-light);
+    border: 2px solid rgba(247,147,26,0.3);
+  }
+  .flow-label { font-size: 12px; font-weight: 600; color: var(--text); }
+  .flow-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .check-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-icon.must { background: var(--orange); color: white; }
+  .check-icon.nice { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue); }
+  .check-icon.stretch { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple); }
+
+  /* SCREEN WIREFRAMES */
+  .screen {
+    background: var(--dark);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 2px solid #333;
+  }
+  .screen-header {
+    background: #1A1A1A;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #333;
+  }
+  .screen-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .screen-title { color: rgba(255,255,255,0.5); font-size: 12px; font-family: 'JetBrains Mono', monospace; margin-left: 8px; }
+  .screen-body { padding: 20px; color: white; }
+
+  .wire-nav {
+    background: #252525;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+  .wire-nav .logo { color: var(--orange); font-weight: 800; font-size: 16px; }
+  .wire-nav .nav-items { display: flex; gap: 16px; }
+
+  .wire-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--orange);
+    color: white;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .wire-btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+  }
+  .wire-btn.green { background: var(--green); }
+
+  .wire-input {
+    background: #1A1A1A;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .wire-stat {
+    background: #1A1A1A;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .wire-stat .ws-value { font-size: 28px; font-weight: 900; color: var(--orange); }
+  .wire-stat .ws-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+
+  .wire-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .wire-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+
+  .wire-leader {
+    background: #1A1A1A;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .wire-leader .rank { color: var(--orange); font-weight: 800; width: 20px; }
+  .wire-leader .name { flex: 1; color: rgba(255,255,255,0.8); }
+  .wire-leader .streak { color: var(--green); font-weight: 700; }
+
+  .wire-badge-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .wire-badge-item {
+    background: #1A1A1A;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+  .wire-badge-icon { font-size: 24px; margin-bottom: 4px; }
+  .wire-badge-label { font-size: 10px; color: rgba(255,255,255,0.5); }
+  .wire-badge-item.earned { border: 1px solid var(--orange); }
+  .wire-badge-item.locked { opacity: 0.4; }
+
+  .wire-tx {
+    background: #1A1A1A;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+  .wire-tx .tx-action { color: rgba(255,255,255,0.8); font-weight: 600; }
+  .wire-tx .tx-amount { color: var(--green); }
+
+  /* FORMULA BOX */
+  .formula {
+    background: var(--dark);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #FFD700;
+    line-height: 1.8;
+  }
+  .formula .f-comment { color: #6B7280; font-family: 'Inter', sans-serif; font-size: 12px; }
+
+  /* SCENARIO BOX */
+  .scenario {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .scenario-header {
+    background: var(--dark3);
+    color: white;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scenario-body { padding: 20px; }
+  .scenario-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .scenario-row:last-child { border-bottom: none; }
+  .scenario-row .label { color: var(--text-muted); }
+  .scenario-row .value { font-weight: 600; }
+  .scenario-row .value.orange { color: var(--orange); }
+  .scenario-row .value.green { color: var(--green); }
+  .scenario-row .value.red { color: var(--red); }
+
+  /* PRIORITY TABLE */
+  .priority-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-item:last-child { border-bottom: none; }
+  .priority-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px;
+    flex-shrink: 0;
+    background: var(--orange-light);
+    color: var(--orange-dark);
+    border: 1px solid rgba(247,147,26,0.3);
+  }
+  .priority-num.later { background: var(--gray-light); color: var(--gray); border-color: var(--border); }
+  .priority-body { flex: 1; }
+  .priority-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .priority-desc { font-size: 12px; color: var(--text-muted); }
+  .priority-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--orange), var(--green));
+    border-radius: 2px;
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -27px; top: 4px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--orange);
+  }
+  .tl-dot.green { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .tl-date { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 4px; }
+  .tl-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .tl-items { font-size: 13px; color: var(--text-muted); }
+  .tl-items li { margin-bottom: 3px; }
+
+  /* PROMPT BOX */
+  .prompt-box {
+    background: var(--dark);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .prompt-header {
+    background: #1A1A1A;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #333;
+  }
+  .prompt-header .ph-label { color: rgba(255,255,255,0.4); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+  .prompt-header .ph-title { color: white; font-weight: 700; }
+  .prompt-body {
+    padding: 24px;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .prompt-body .ph { color: var(--orange); font-weight: 700; }
+  .prompt-body .pn { color: var(--green); }
+  .prompt-body .pk { color: #93C5FD; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout.warning { background: #FFF7ED; border: 1px solid #FED7AA; }
+  .callout.info { background: var(--blue-light); border: 1px solid #BFDBFE; }
+  .callout.success { background: var(--green-light); border: 1px solid #A7F3D0; }
+  .callout.tip { background: var(--purple-light); border: 1px solid #DDD6FE; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 13px; }
+  .callout-text strong { display: block; margin-bottom: 4px; font-size: 14px; }
+
+  /* FOOTER */
+  .doc-footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 32px;
+    font-size: 11px;
+    margin-top: 60px;
+  }
+  .doc-footer strong { color: var(--orange); }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* SECTION SPACER */
+  .spacer { height: 40px; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-badge">vibecode.finance · OP_NET · Week 2</div>
+    <h1>StreakSats</h1>
+    <p class="cover-sub">
+      Habit Tracking + Yield Farming on Bitcoin L1<br/>
+      A complete contest game plan — prompt, tokenomics &amp; UX
+    </p>
+
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
+      <span class="badge orange" style="font-size:12px; padding:6px 16px;">Bitcoin L1 Native</span>
+      <span class="badge green" style="font-size:12px; padding:6px 16px;">Self-Sustaining Yield</span>
+      <span class="badge blue" style="font-size:12px; padding:6px 16px;">Soulbound NFT Badges</span>
+      <span class="badge purple" style="font-size:12px; padding:6px 16px;">Motocats Integration</span>
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">Contest Deadline</div>
+        <div class="value orange">Mar 6, 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Tech Stack</div>
+        <div class="value">OP_NET + AssemblyScript</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Target Theme</div>
+        <div class="value green">The DeFi Signal</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Days to Build</div>
+        <div class="value orange">5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 1: BOB PROMPT ==================== -->
+<div class="page">
+
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">The Bob Prompt</div>
+      <div class="section-desc">Paste this into Bob on vibecode.finance — refined, unambiguous, Bob-ready</div>
+    </div>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-header">
+      <span style="font-size:18px;">🤖</span>
+      <div>
+        <div class="ph-label">Paste into Bob</div>
+        <div class="ph-title">vibecode.finance → "Start Building" → Bob AI Agent</div>
+      </div>
+    </div>
+    <div class="prompt-body">
+<span class="ph">Build a habit-tracking + yield-farming dApp called StreakSats on Bitcoin L1 using OP_NET.</span>
+
+<span class="pk">== CORE CONCEPT ==</span>
+Users stake BTC (minimum 10,000 sats) or PILL tokens (minimum 500 PILL) to make a public commitment to a real-life habit. Every check-in period they call a checkIn() function on-chain to prove they maintained the habit. Maintaining streaks earns yield. Breaking streaks triggers the Impatience Tax.
+
+<span class="pk">== SMART CONTRACT FUNCTIONS ==</span>
+<span class="pn">createHabit(name: string, frequency: string, stakeAmount: u256, token: string)</span>
+- frequency is either "daily" (86400 second window) or "weekly" (604800 second window)
+- token is either "BTC" or "PILL"
+- Transfers stake from user wallet into contract pool
+- Records: user address, habit name, frequency, stakeAmount, streakCount=0, lastCheckIn=0, isActive=true
+
+<span class="pn">checkIn(habitId: u256)</span>
+- Verifiable once per frequency window (enforced by block timestamp)
+- Increments streakCount by 1
+- Updates lastCheckIn to current block timestamp
+- Emits CheckInEvent(user, habitId, newStreakCount)
+- If streak hits 7, 30, or 100 days: mint a soulbound OP_721 badge NFT (non-transferable)
+
+<span class="pn">breakStreak(habitId: u256)</span>
+- Called automatically-detectable when checkIn window is missed (or callable by anyone to trigger)
+- Applies Impatience Tax: deducts 10% of user's stakeAmount
+- Tax is added to the redistributionPool
+- Remaining 90% of stake is returned to user
+- Resets streakCount to 0, isActive=false for that habit
+
+<span class="pn">claimYield()</span>
+- User claims their proportional share of the redistributionPool
+- Share formula: userStreakLength / totalActiveStreakLengths * redistributionPool
+- Only active streak holders can claim
+- Resets their claimable balance to 0
+
+<span class="pn">sponsor()</span>
+- Any wallet can call this with a BTC transfer to add funds to the redistributionPool
+- Records sponsor address and amount for display
+
+<span class="pn">challenge(friendAddress: address, multiplier: u8)</span>
+- Sends a challenge to a friend's wallet address
+- multiplier (1–3x the base entry fee) is proposed
+- Friend has 48 hours (measured in blocks) to accept via acceptChallenge(challengeId)
+- If accepted: both parties must stake multiplier × their base entry amount
+- If declined or expired: no penalty
+
+<span class="pn">getLeaderboard()</span>
+- Returns top 10 addresses sorted by active streakCount descending
+- Readable by anyone, no gas cost
+
+<span class="pn">getMotoMiles(user: address)</span>
+- Returns the user's motoMiles count (1 mile earned per successful checkIn)
+- Stored on-chain, readable for airdrop snapshot purposes
+
+<span class="pk">== SOULBOUND BADGES (OP_721) ==</span>
+Deploy a separate non-transferable OP_721 contract called StreakBadge.
+Override the transfer() function to always revert (soulbound = wallet-bound forever).
+Mint badges at these milestones:
+- 7-day streak → "Consistent" badge (metadata: bronze flame icon, streak count, habit name, date)
+- 30-day streak → "Dedicated" badge (metadata: silver flame icon)
+- 100-day streak → "Legend" badge (metadata: gold flame icon)
+Badge metadata stored on-chain in OP_721 tokenURI as JSON string.
+
+<span class="pk">== TOKEN SUPPORT ==</span>
+Accept both native BTC (in satoshis) and PILL token (OP_20) as stake currency.
+If staking PILL: use transferFrom() to pull PILL tokens into the contract on createHabit().
+Track separate pools: btcPool and pillPool.
+Yield from btcPool paid in BTC; yield from pillPool paid in PILL.
+
+<span class="pk">== MOTO MILES ==</span>
+Track a motoMiles: Map&lt;address, u256&gt; counter.
+Increment by 1 on every successful checkIn(), regardless of habit currency.
+Expose getMotoMiles(user) as a public view function.
+Display on user dashboard — label it "Moto Miles (for airdrop snapshot)".
+
+<span class="pk">== FRONTEND SCREENS ==</span>
+Build a clean, dark-mode UI with Bitcoin/orange branding. Include these screens:
+
+1. HOME — Hero with tagline "Stack Sats. Build Habits. Earn Yield." Connect Wallet button. Live stats: Total Staked, Active Streamers, Total Redistributed.
+
+2. CREATE HABIT — Form: habit name (text), habit type (dropdown: exercise / reading / orange-pilling friends / no coffee / custom), frequency (daily/weekly toggle), stake amount + currency (BTC or PILL). Preview shows expected yield range. Submit = calls createHabit().
+
+3. MY DASHBOARD — Active habits list. For each: streak counter (big number), last check-in time, "Check In Now" button (calls checkIn()), yield claimable amount, "Claim Yield" button. Moto Miles counter. Badges earned display.
+
+4. LEADERBOARD — Top 10 table: rank, wallet address (truncated), habit name, streak days, Moto Miles. Refresh button.
+
+5. CHALLENGE — Address input field, multiplier selector (1x/2x/3x), "Send Challenge" button. Pending challenges inbox: accept or decline.
+
+6. BADGES — Grid of all 3 badge types. Earned badges glow orange. Locked badges shown greyed out with requirement.
+
+<span class="pk">== DEPLOYMENT ==</span>
+Use OP_NET AssemblyScript. Deploy via OP_WALLET Chrome extension.
+Prioritize: checkIn + Impatience Tax + Leaderboard + Badges first. Challenge and sponsor features second.
+If any feature is too complex, simplify rather than skip — a working MVP is better than a broken full feature set.
+</div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-icon">⚡</div>
+    <div class="callout-text">
+      <strong>Before pasting to Bob</strong>
+      Install OP_WALLET Chrome extension and get testnet BTC first. Bob will ask you to connect a wallet when deploying. The prompt above is ordered by priority — if Bob asks where to start, say "checkIn() and breakStreak() first."
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== PAGE 2: TOKENOMICS ==================== -->
+<div class="page page-break">
+
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Tokenomics &amp; Math</div>
+      <div class="section-desc">How the money flows, who earns what, and why it's self-sustaining</div>
+    </div>
+  </div>
+
+  <!-- Core Mechanic -->
+  <h2 style="margin-bottom:16px;">2.1 — The Core Loop</h2>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-icon">💰</div>
+      <div class="flow-label">Stake Entry</div>
+      <div class="flow-sub">10k sats or 500 PILL</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">✅</div>
+      <div class="flow-label">Daily Check-In</div>
+      <div class="flow-sub">On-chain proof tx</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">🔥</div>
+      <div class="flow-label">Streak Grows</div>
+      <div class="flow-sub">Weight increases</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">📈</div>
+      <div class="flow-label">Earn Yield</div>
+      <div class="flow-sub">From tax pool</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">🏆</div>
+      <div class="flow-label">Claim + Badge</div>
+      <div class="flow-sub">NFT at milestones</div>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom:16px;">2.2 — Yield Formula</h2>
+
+  <div class="formula">
+<span class="f-comment">// How much yield a user earns from the redistribution pool:</span>
+
+userYield = (userStreakDays / totalActiveStreakDays) × redistributionPool
+
+<span class="f-comment">// Example variables:</span>
+userStreakDays      = 30 days
+totalActiveStreakDays = 480 days  (sum of all active streakers)
+redistributionPool = 50,000 sats  (accumulated from Impatience Tax + sponsors)
+
+<span class="f-comment">// Result:</span>
+userYield = (30 / 480) × 50,000 = <span style="color:var(--green)">3,125 sats</span>
+  </div>
+
+  <div class="formula">
+<span class="f-comment">// Impatience Tax on streak break:</span>
+
+slashedAmount = stakeAmount × 0.10     <span class="f-comment">// 10% penalty</span>
+returned      = stakeAmount × 0.90     <span class="f-comment">// 90% back to user</span>
+toPool        = slashedAmount          <span class="f-comment">// feeds redistributionPool</span>
+
+<span class="f-comment">// Example: user staked 10,000 sats, breaks streak on day 5:</span>
+slashedAmount = 1,000 sats  → <span style="color:var(--orange)">redistributed to streak-keepers</span>
+returned      = 9,000 sats  → <span style="color:var(--green)">back to breaker's wallet</span>
+  </div>
+
+  <hr class="divider"/>
+
+  <h2 style="margin-bottom:16px;">2.3 — Realistic Scenarios</h2>
+
+  <!-- Scenario 1 -->
+  <div class="scenario">
+    <div class="scenario-header">
+      <span>📊</span> Scenario A — Small Launch: 50 Users
+    </div>
+    <div class="scenario-body">
+      <div class="grid-3">
+        <div class="metric-card">
+          <div class="metric-label">Total Users</div>
+          <div class="metric-value">50</div>
+          <div class="metric-sub">Daily habit streakers</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Avg Stake</div>
+          <div class="metric-value orange">15k</div>
+          <div class="metric-sub">sats per user</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Streak Breakers</div>
+          <div class="metric-value red">20%</div>
+          <div class="metric-sub">10 users break/week</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="label">Total pool staked</span><span class="value orange">750,000 sats (~$450)</span></div>
+      <div class="scenario-row"><span class="label">Weekly breakers (10 users × 15k × 10%)</span><span class="value red">15,000 sats tax collected</span></div>
+      <div class="scenario-row"><span class="label">Active streakers earning yield</span><span class="value">40 users</span></div>
+      <div class="scenario-row"><span class="label">Avg yield per active user/week</span><span class="value green">375 sats (~$0.22)</span></div>
+      <div class="scenario-row"><span class="label">30-day streaker yield (3× weight)</span><span class="value green">~1,125 sats/week</span></div>
+    </div>
+  </div>
+
+  <!-- Scenario 2 -->
+  <div class="scenario">
+    <div class="scenario-header">
+      <span>🚀</span> Scenario B — Growth: 500 Users + Sponsors
+    </div>
+    <div class="scenario-body">
+      <div class="grid-3">
+        <div class="metric-card">
+          <div class="metric-label">Total Users</div>
+          <div class="metric-value">500</div>
+          <div class="metric-sub">Mixed daily/weekly</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Sponsor Pool</div>
+          <div class="metric-value green">0.01</div>
+          <div class="metric-sub">BTC per week added</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Breaker Rate</div>
+          <div class="metric-value red">25%</div>
+          <div class="metric-sub">125 users/week</div>
+        </div>
+      </div>
+      <div class="scenario-row"><span class="label">Weekly tax from breakers (125 × 15k × 10%)</span><span class="value red">187,500 sats</span></div>
+      <div class="scenario-row"><span class="label">Sponsor injection</span><span class="value orange">1,000,000 sats</span></div>
+      <div class="scenario-row"><span class="label">Total weekly redistribution pool</span><span class="value orange">1,187,500 sats (~$714)</span></div>
+      <div class="scenario-row"><span class="label">Top 100-day streaker weekly yield</span><span class="value green">~35,000 sats (~$21)</span></div>
+      <div class="scenario-row"><span class="label">Avg active user weekly yield</span><span class="value green">~3,200 sats (~$1.92)</span></div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <h2 style="margin-bottom:16px;">2.4 — Challenge Multiplier Economics</h2>
+
+  <table>
+    <tr>
+      <th>Multiplier</th>
+      <th>Base Stake</th>
+      <th>Required Stake</th>
+      <th>Tax if Broken</th>
+      <th>Effect</th>
+    </tr>
+    <tr>
+      <td>1× (baseline)</td>
+      <td>10,000 sats</td>
+      <td class="td-orange">10,000 sats</td>
+      <td class="td-red">1,000 sats</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>2× (heated)</td>
+      <td>10,000 sats</td>
+      <td class="td-orange">20,000 sats</td>
+      <td class="td-red">2,000 sats</td>
+      <td>More skin in game</td>
+    </tr>
+    <tr>
+      <td>3× (max pressure)</td>
+      <td>10,000 sats</td>
+      <td class="td-orange">30,000 sats</td>
+      <td class="td-red">3,000 sats</td>
+      <td>High stakes, viral</td>
+    </tr>
+  </table>
+
+  <h2 style="margin-bottom:16px;">2.5 — Badge Milestone Math</h2>
+
+  <table>
+    <tr>
+      <th>Badge</th>
+      <th>Streak Required</th>
+      <th>Daily Check-In Txs</th>
+      <th>Min Gas Cost</th>
+      <th>Yield Multiplier</th>
+    </tr>
+    <tr>
+      <td>🥉 Consistent</td>
+      <td>7 days</td>
+      <td>7 txs</td>
+      <td class="td-orange">2,310 sats</td>
+      <td class="td-green">1×</td>
+    </tr>
+    <tr>
+      <td>🥈 Dedicated</td>
+      <td>30 days</td>
+      <td>30 txs</td>
+      <td class="td-orange">9,900 sats</td>
+      <td class="td-green">2×</td>
+    </tr>
+    <tr>
+      <td>🥇 Legend</td>
+      <td>100 days</td>
+      <td>100 txs</td>
+      <td class="td-orange">33,000 sats</td>
+      <td class="td-green">3×</td>
+    </tr>
+  </table>
+  <p style="color:var(--text-muted); font-size:12px;">* Gas cost calculated at minimum 330 sats/tx. Weekly check-in option reduces this 7× for cost-sensitive users.</p>
+
+  <h2 style="margin-bottom:16px;">2.6 — Moto Miles Tiers</h2>
+
+  <table>
+    <tr>
+      <th>Miles Earned</th>
+      <th>Tier Name</th>
+      <th>Days to Reach (Daily)</th>
+      <th>Airdrop Priority</th>
+    </tr>
+    <tr>
+      <td>1–49</td>
+      <td>Rookie Rider</td>
+      <td>1–49 days</td>
+      <td>Tier 0 (waitlist)</td>
+    </tr>
+    <tr>
+      <td>50–99</td>
+      <td>Street Runner</td>
+      <td>50–99 days</td>
+      <td class="td-orange">Tier 1</td>
+    </tr>
+    <tr>
+      <td>100–249</td>
+      <td>Moto Pilgrim</td>
+      <td>100–249 days</td>
+      <td class="td-orange">Tier 2 (priority)</td>
+    </tr>
+    <tr>
+      <td>250+</td>
+      <td>Moto Legend</td>
+      <td>250+ days</td>
+      <td class="td-green">Tier 3 (guaranteed)</td>
+    </tr>
+  </table>
+
+</div>
+
+<!-- ==================== PAGE 3: FRONTEND FLOW ==================== -->
+<div class="page page-break">
+
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Frontend &amp; UX Flow</div>
+      <div class="section-desc">Every screen, every user interaction, wireframed</div>
+    </div>
+  </div>
+
+  <!-- User Journey -->
+  <h2 style="margin-bottom:16px;">3.1 — Complete User Journey</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Step 1 — First Visit</div>
+      <div class="tl-title">Home Screen — Hook them immediately</div>
+      <ul class="tl-items">
+        <li>Bold headline: "Stack Sats. Build Habits. Earn Yield."</li>
+        <li>Live counters: Total BTC Staked, Active Streakers, Total Redistributed today</li>
+        <li>"Connect Wallet" (OP_WALLET) is the single CTA</li>
+        <li>Leaderboard preview below — top 3 streaks visible without connecting</li>
+        <li>Short explainer: How it works in 3 bullet points</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Step 2 — Onboarding</div>
+      <div class="tl-title">Create Habit Screen — Commitment ritual</div>
+      <ul class="tl-items">
+        <li>Habit name text field (e.g. "Morning run before 7am")</li>
+        <li>Habit category dropdown: Exercise / Reading / Orange-Pilling Friends / No Coffee / Custom</li>
+        <li>Frequency toggle: Daily (more addictive) / Weekly (cheaper gas)</li>
+        <li>Stake amount slider: 10,000–500,000 sats OR 500–50,000 PILL</li>
+        <li>Preview card updates live: "At this streak level your expected weekly yield is X sats"</li>
+        <li>Submit button: "Make My Commitment" → wallet confirms transaction</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">Step 3 — Daily Return (the sticky loop)</div>
+      <div class="tl-title">Dashboard Screen — The core retention surface</div>
+      <ul class="tl-items">
+        <li>Big flame emoji + streak number front-and-center ("🔥 Day 14")</li>
+        <li>Countdown timer to next check-in deadline (red when under 2 hours)</li>
+        <li>"CHECK IN NOW" button — large, orange, impossible to miss</li>
+        <li>Yield claimable amount with "Claim" button beside it</li>
+        <li>Moto Miles counter with progress bar to next tier</li>
+        <li>Badges row: earned ones glow, locked ones show X days remaining</li>
+        <li>Quick link to challenge a friend</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">Step 4 — Social Viral Loop</div>
+      <div class="tl-title">Challenge Screen — Drive word-of-mouth</div>
+      <ul class="tl-items">
+        <li>Paste a Bitcoin wallet address or ENS-style name</li>
+        <li>Select multiplier: 1× / 2× / 3× with impact description</li>
+        <li>"Send Challenge" — sends on-chain challenge tx</li>
+        <li>Challenge inbox: pending received challenges with Accept / Decline</li>
+        <li>48-hour countdown on pending challenges</li>
+        <li>Share button: generates tweet "I just challenged @[address] to a 3× StreakSats battle #opnetvibecode"</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WIREFRAMES -->
+  <h2 style="margin-bottom:20px;">3.2 — Screen Wireframes</h2>
+
+  <!-- HOME SCREEN -->
+  <p style="font-weight:700; margin-bottom:10px;">Screen 1 — Home (Landing)</p>
+  <div class="screen">
+    <div class="screen-header">
+      <div class="screen-dot" style="background:#FF5F57"></div>
+      <div class="screen-dot" style="background:#FFBD2E"></div>
+      <div class="screen-dot" style="background:#28CA41"></div>
+      <span class="screen-title">streaksats.btc / home</span>
+    </div>
+    <div class="screen-body">
+      <div class="wire-nav">
+        <div class="logo">⚡ StreakSats</div>
+        <div class="nav-items">
+          <span>Leaderboard</span>
+          <span>How It Works</span>
+        </div>
+        <div class="wire-btn">Connect Wallet</div>
+      </div>
+
+      <div style="text-align:center; padding:24px 0;">
+        <div style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:3px; margin-bottom:12px; text-transform:uppercase;">Built on Bitcoin L1 · Powered by OP_NET</div>
+        <div style="font-size:28px; font-weight:900; color:white; line-height:1.2; margin-bottom:8px;">Stack Sats.<br/>Build Habits.<br/><span style="color:#F7931A;">Earn Yield.</span></div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:24px;">Commit to real habits. Check in daily. Earn yield from quitters.</div>
+        <div class="wire-btn" style="display:inline-block; font-size:15px; padding:14px 40px;">Start My Streak →</div>
+      </div>
+
+      <div class="wire-grid" style="margin-bottom:24px;">
+        <div class="wire-stat">
+          <div class="ws-value">0.47 BTC</div>
+          <div class="ws-label">Total Staked</div>
+        </div>
+        <div class="wire-stat">
+          <div class="ws-value" style="color:#00C896;">312</div>
+          <div class="ws-label">Active Streakers</div>
+        </div>
+        <div class="wire-stat">
+          <div class="ws-value" style="color:#FFD700;">89k sats</div>
+          <div class="ws-label">Redistributed Today</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px;">🏆 Top Streaks Right Now</div>
+      <div class="wire-leader"><span class="rank">1</span><span class="name">bc1q...a4k2 · Morning Run</span><span class="streak">🔥 87 days</span></div>
+      <div class="wire-leader"><span class="rank">2</span><span class="name">bc1q...9xm1 · Daily Reading</span><span class="streak">🔥 64 days</span></div>
+      <div class="wire-leader"><span class="rank">3</span><span class="name">bc1q...7pl9 · Orange-Pilling</span><span class="streak">🔥 51 days</span></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <p style="font-weight:700; margin-bottom:10px; margin-top:24px;">Screen 2 — My Dashboard (Daily Return)</p>
+  <div class="screen">
+    <div class="screen-header">
+      <div class="screen-dot" style="background:#FF5F57"></div>
+      <div class="screen-dot" style="background:#FFBD2E"></div>
+      <div class="screen-dot" style="background:#28CA41"></div>
+      <span class="screen-title">streaksats.btc / dashboard</span>
+    </div>
+    <div class="screen-body">
+      <div style="text-align:center; padding:20px 0 16px;">
+        <div style="font-size:60px; font-weight:900; color:#F7931A; line-height:1;">🔥 14</div>
+        <div style="color:rgba(255,255,255,0.6); font-size:13px; margin-top:4px;">Day streak · Morning Run</div>
+        <div style="color:#FF4C4C; font-size:12px; margin-top:8px;">⏱ Check-in closes in 1h 42m</div>
+      </div>
+
+      <div class="wire-btn" style="width:100%; display:block; text-align:center; padding:16px; font-size:16px; margin-bottom:16px;">✅ CHECK IN NOW</div>
+
+      <div class="wire-grid-2" style="margin-bottom:16px;">
+        <div class="wire-stat">
+          <div class="ws-value" style="color:#00C896; font-size:18px;">+2,140 sats</div>
+          <div class="ws-label">Claimable Yield</div>
+        </div>
+        <div class="wire-stat">
+          <div class="ws-value" style="color:#93C5FD; font-size:18px;">14 🏍</div>
+          <div class="ws-label">Moto Miles</div>
+        </div>
+      </div>
+
+      <div class="wire-btn green" style="display:block; text-align:center; padding:12px; margin-bottom:16px;">Claim 2,140 sats →</div>
+
+      <div style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px;">🏅 Badges</div>
+      <div class="wire-badge-row">
+        <div class="wire-badge-item earned">
+          <div class="wire-badge-icon">🥉</div>
+          <div class="wire-badge-label">Consistent<br/>Day 7</div>
+        </div>
+        <div class="wire-badge-item locked">
+          <div class="wire-badge-icon">🥈</div>
+          <div class="wire-badge-label">Dedicated<br/>16 days left</div>
+        </div>
+        <div class="wire-badge-item locked">
+          <div class="wire-badge-icon">🥇</div>
+          <div class="wire-badge-label">Legend<br/>86 days left</div>
+        </div>
+      </div>
+
+      <div class="wire-tx"><span class="tx-action">✅ Check In #14</span><span style="color:rgba(255,255,255,0.3)">2 min ago</span><span class="tx-amount">+153 sats yield</span></div>
+      <div class="wire-tx"><span class="tx-action">✅ Check In #13</span><span style="color:rgba(255,255,255,0.3)">1d ago</span><span class="tx-amount">+148 sats yield</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== PAGE 4: BUILD PLAN ==================== -->
+<div class="page page-break">
+
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Build Priority &amp; 5-Day Plan</div>
+      <div class="section-desc">What to build first, what to skip if time runs out</div>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom:16px;">4.1 — Feature Priority (Tell Bob This Order)</h2>
+
+  <div class="priority-item">
+    <div class="priority-num">1</div>
+    <div class="priority-body">
+      <div class="priority-title">Streak Tracking + Check-In</div>
+      <div class="priority-desc">createHabit(), checkIn(), breakStreak(). The core loop. Everything else depends on this. Must work flawlessly.</div>
+      <div class="priority-tags"><span class="badge orange">Must Ship</span><span class="badge blue">Day 1–2</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">2</div>
+    <div class="priority-body">
+      <div class="priority-title">Impatience Tax + Redistribution Pool</div>
+      <div class="priority-desc">10% slash on break → pool. claimYield() weighted by streak length. This IS the DeFi mechanic — judges need to see it work.</div>
+      <div class="priority-tags"><span class="badge orange">Must Ship</span><span class="badge blue">Day 2</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">3</div>
+    <div class="priority-body">
+      <div class="priority-title">Leaderboard</div>
+      <div class="priority-desc">getLeaderboard() returning top 10 by streak. Read-only, cheap. Critical for social proof and demo video wow factor.</div>
+      <div class="priority-tags"><span class="badge orange">Must Ship</span><span class="badge blue">Day 2–3</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num">4</div>
+    <div class="priority-body">
+      <div class="priority-title">Soulbound Badges (OP_721)</div>
+      <div class="priority-desc">Non-transferable NFTs at 7/30/100 day milestones. Big differentiator. Judges will specifically notice this as a sophisticated primitive.</div>
+      <div class="priority-tags"><span class="badge orange">Must Ship</span><span class="badge blue">Day 3</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num later">5</div>
+    <div class="priority-body">
+      <div class="priority-title">Moto Miles Counter</div>
+      <div class="priority-desc">Simple on-chain counter per address. +1 per checkIn(). Low complexity, high contest appeal (Motocats integration story).</div>
+      <div class="priority-tags"><span class="badge blue">Nice to Have</span><span class="badge blue">Day 3–4</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num later">6</div>
+    <div class="priority-body">
+      <div class="priority-title">Social Challenge System</div>
+      <div class="priority-desc">challenge() + acceptChallenge(). Adds multiplier stakes. Viral mechanic but complex state management. Build last.</div>
+      <div class="priority-tags"><span class="badge purple">Stretch</span><span class="badge blue">Day 4–5</span></div>
+    </div>
+  </div>
+
+  <div class="priority-item">
+    <div class="priority-num later">7</div>
+    <div class="priority-body">
+      <div class="priority-title">Sponsor Pool + PILL Token Dual Support</div>
+      <div class="priority-desc">sponsor() function and PILL staking. Adds depth but is not critical for MVP demo. Add if time allows.</div>
+      <div class="priority-tags"><span class="badge purple">Stretch</span><span class="badge blue">Day 5 only if time</span></div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <h2 style="margin-bottom:16px;">4.2 — 5-Day Sprint Timeline</h2>
+
+  <table>
+    <tr>
+      <th>Day</th>
+      <th>Date</th>
+      <th>Goal</th>
+      <th>Done When</th>
+    </tr>
+    <tr>
+      <td><strong>Day 1</strong></td>
+      <td>Mar 1 (Today)</td>
+      <td>Install OP_WALLET · Read docs · Paste prompt to Bob · Get first contract drafted</td>
+      <td class="td-orange">Bob outputs smart contract code</td>
+    </tr>
+    <tr>
+      <td><strong>Day 2</strong></td>
+      <td>Mar 2</td>
+      <td>Deploy contract to testnet · Test checkIn() + breakStreak() + claimYield()</td>
+      <td class="td-orange">Streak increments, tax collects, yield claimable</td>
+    </tr>
+    <tr>
+      <td><strong>Day 3</strong></td>
+      <td>Mar 3</td>
+      <td>Deploy badge contract (OP_721 soulbound) · Frontend: Dashboard + Create Habit screens</td>
+      <td class="td-orange">Wallet connects, habit created, check-in button works</td>
+    </tr>
+    <tr>
+      <td><strong>Day 4</strong></td>
+      <td>Mar 4</td>
+      <td>Frontend polish: Leaderboard + Badges gallery · Moto Miles counter · Bug fixes</td>
+      <td class="td-green">Full demo flow works end-to-end</td>
+    </tr>
+    <tr>
+      <td><strong>Day 5</strong></td>
+      <td>Mar 5</td>
+      <td>Record 60-90 sec demo video · Push to GitHub · Tweet #opnetvibecode · Submit</td>
+      <td class="td-green">Submitted before Mar 6 deadline</td>
+    </tr>
+  </table>
+
+  <hr class="divider"/>
+
+  <h2 style="margin-bottom:16px;">4.3 — Demo Video Script (60 seconds)</h2>
+
+  <div class="card dark">
+    <div class="card-title">🎬 Suggested Demo Flow</div>
+    <ol style="padding-left:20px; line-height:2;">
+      <li><strong>0–5s:</strong> Hook — "What if Bitcoin could hold you accountable?"</li>
+      <li><strong>5–15s:</strong> Show Home screen. Point to live leaderboard and stats.</li>
+      <li><strong>15–25s:</strong> Create a habit — type "Morning Run", stake 10k sats, hit confirm.</li>
+      <li><strong>25–35s:</strong> Dashboard — show the streak counter, the countdown timer, hit "Check In Now".</li>
+      <li><strong>35–45s:</strong> Show Impatience Tax in action — trigger a break, show 10% slashed to pool, yield distributed.</li>
+      <li><strong>45–55s:</strong> Show badge minted on-chain (7-day Consistent badge), show Moto Miles counter.</li>
+      <li><strong>55–60s:</strong> End card — "StreakSats. Built on Bitcoin L1. #opnetvibecode"</li>
+    </ol>
+  </div>
+
+  <h2 style="margin-bottom:16px;">4.4 — Winning Arguments (for judges)</h2>
+
+  <div class="grid-2">
+    <div class="card green">
+      <div class="card-title">✅ Why StreakSats Wins</div>
+      <ul>
+        <li><strong>Novel primitive</strong> — Proof-of-Behavior DeFi. Nobody has done this on Bitcoin L1.</li>
+        <li><strong>Self-sustaining</strong> — Yield requires no external liquidity. Quitters fund earners.</li>
+        <li><strong>Cultural fit</strong> — "Orange-pilling friends" habit is deeply Bitcoin.</li>
+        <li><strong>Cross-protocol</strong> — Motocats + PILL integration shows ecosystem awareness.</li>
+        <li><strong>Week 2 perfect fit</strong> — Literally "tools that make money work on Bitcoin."</li>
+        <li><strong>Soulbound NFTs</strong> — Sophisticated primitive, rare on Bitcoin L1.</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <div class="card-title">🎯 Contest Submission Checklist</div>
+      <ul class="checklist">
+        <li><div class="check-icon must">✓</div><div>GitHub repo with contract + frontend code</div></li>
+        <li><div class="check-icon must">✓</div><div>30–90 second demo video</div></li>
+        <li><div class="check-icon must">✓</div><div>Tweet with #opnetvibecode tag</div></li>
+        <li><div class="check-icon must">✓</div><div>Live dApp link (deployed on OP_NET)</div></li>
+        <li><div class="check-icon nice">+</div><div>Tag @opnetbtc and @vibecode_finance in tweet</div></li>
+        <li><div class="check-icon nice">+</div><div>Post in OP_NET Discord with demo link</div></li>
+        <li><div class="check-icon stretch">★</div><div>Short Twitter thread explaining the tokenomics</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">💡</div>
+    <div class="callout-text">
+      <strong>Pro tip for the video</strong>
+      Show the Bitcoin L1 transaction hash on screen when you check in. Judges will see it's truly on-chain. Paste the tx hash in the video overlay. That's what separates a real dApp from a mockup.
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">🏍</div>
+    <div class="callout-text">
+      <strong>Motocats angle</strong>
+      When tweeting, mention "Moto Miles" and tag the Motocats community. Their holders will want to use StreakSats specifically to earn airdrop priority — that's organic growth and judge-visible traction.
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <strong>StreakSats</strong> · Contest Game Plan · vibecode.finance Week 2 · March 2026<br/>
+  Built for OP_NET Bitcoin L1 · Theme: The DeFi Signal · Deadline: March 6, 2026
+</div>
+
+</body>
+</html>
