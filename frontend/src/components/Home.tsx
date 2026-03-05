@@ -88,7 +88,7 @@ export default function Home() {
                         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                             {connected ? (
                                 <button className="btn btn-primary btn-lg" onClick={() => setPage('create')}>
-                                    Streak a Position
+                                    Commit a Habit
                                 </button>
                             ) : (
                                 <button className="btn btn-primary btn-lg" onClick={connectWallet}>
@@ -111,7 +111,7 @@ export default function Home() {
                         {[
                             {
                                 label: 'Total Value Staked',
-                                value: stats ? `${formatPill(stats.totalStaked)} PILL` : '—',
+                                value: stats ? formatPill(stats.totalStaked) : '—',
                                 note:  'across active habits',
                                 accent: false,
                             },
@@ -174,7 +174,7 @@ export default function Home() {
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', paddingRight: 28, borderRight: '1px solid var(--border)', marginRight: 0, flexShrink: 0 }}>
                             Live
                         </div>
-                        <MetricPill label="Total Staked"    value={stats ? `${formatPill(stats.totalStaked)} PILL` : '—'} />
+                        <MetricPill label="Total Staked"    value={stats ? formatPill(stats.totalStaked) : '—'} />
                         <MetricPill label="Streak-Days"     value={stats ? stats.totalStreakDays.toLocaleString() : '—'} />
                         <MetricPill label="Habits"          value={stats ? stats.totalHabits.toLocaleString() : '—'} />
                         <MetricPill label="Yield Rate"      value="10%" accent />
@@ -302,7 +302,7 @@ export default function Home() {
                         <div style={{ marginTop: 16, display: 'flex', gap: 10 }}>
                             {connected ? (
                                 <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => setPage('create')}>
-                                    Streak a Position
+                                    Commit a Habit
                                 </button>
                             ) : (
                                 <button className="btn btn-primary" style={{ flex: 1 }} onClick={connectWallet}>

@@ -77,10 +77,16 @@ export default function Challenge() {
     const [cancelling,      setCancelling]       = useState<string | null>(null);
     const [acceptedTxId,    setAcceptedTxId]     = useState<string | null>(null);
 
-    const pollRef     = useRef<ReturnType<typeof setInterval> | null>(null);
-    const lookupTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pollRef        = useRef<ReturnType<typeof setInterval> | null>(null);
+    const approvePollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const lookupTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
     const stopPoll = () => { if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; } };
-    useEffect(() => () => { stopPoll(); if (lookupTimer.current) clearTimeout(lookupTimer.current); }, []);
+    const stopApprovePoll = () => { if (approvePollRef.current) { clearInterval(approvePollRef.current); approvePollRef.current = null; } };
+    useEffect(() => () => {
+        stopPoll();
+        stopApprovePoll();
+        if (lookupTimer.current) clearTimeout(lookupTimer.current);
+    }, []);
 
     // Load incoming challenge IDs when wallet connects
     useEffect(() => {
@@ -164,20 +170,16 @@ export default function Challenge() {
         }
     };
 
-    // ── Send Challenge ─────────────────────────────────────────────────────────
-    const handleChallenge = async () => {
-        if (!connected || !address) { connectWallet(); return; }
-        if (!friendAddr.trim())      { addToast('Enter a wallet address', 'error'); return; }
-        if (baseAmount < MIN_PILL_STAKE) { addToast('Base amount must be ≥ 500 PILL', 'error'); return; }
-        if (!STREAK_SATS_ADDRESS)    { addToast('Contract not deployed yet', 'error'); return; }
-
+    // ── Send Challenge (phase 2 — called once allowance is confirmed) ──────────
+    const executeChallenge = async () => {
+        if (!address) return;
         setSending(true);
         try {
             const provider       = new JSONRpcProvider({ url: RPC_URL, network: NETWORK });
-            const senderAddr     = await provider.getPublicKeyInfo(address!, false);
+            const senderAddr     = await provider.getPublicKeyInfo(address, false);
             const friendResolved = await provider.getPublicKeyInfo(friendAddr.trim(), false);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const contract = getContract(STREAK_SATS_ADDRESS, STREAK_SATS_ABI, provider, NETWORK, senderAddr) as any;
+            const contract = getContract(STREAK_SATS_ADDRESS!, STREAK_SATS_ABI, provider, NETWORK, senderAddr) as any;
             const sim  = await contract.challenge(friendResolved, BigInt(multiplier), baseAmount);
             const txId = await sendTx(sim as Parameters<typeof sendTx>[0], address);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -190,6 +192,65 @@ export default function Challenge() {
             addToast(`Failed: ${err instanceof Error ? err.message : String(err)}`, 'error');
         } finally {
             setSending(false);
+        }
+    };
+
+    // ── Send Challenge (phase 1 — check allowance, approve if needed) ──────────
+    const handleChallenge = async () => {
+        if (!connected || !address) { connectWallet(); return; }
+        if (!friendAddr.trim())          { addToast('Enter a wallet address', 'error'); return; }
+        if (baseAmount < MIN_PILL_STAKE) { addToast('Base amount must be ≥ 500 PILL', 'error'); return; }
+        if (!STREAK_SATS_ADDRESS)        { addToast('Contract not deployed yet', 'error'); return; }
+
+        setSending(true);
+        try {
+            const provider   = new JSONRpcProvider({ url: RPC_URL, network: NETWORK });
+            const senderAddr = await provider.getPublicKeyInfo(address, false);
+            const streakAddr = await provider.getPublicKeyInfo(STREAK_SATS_ADDRESS!, true);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const pillContract = getContract(PILL_TOKEN_ADDRESS!, PILL_TOKEN_ABI, provider, NETWORK, senderAddr) as any;
+
+            const allowResult      = await pillContract.allowance(senderAddr, streakAddr);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const currentAllowance = BigInt(String((allowResult as any)?.properties?.remaining ?? 0n));
+
+            if (currentAllowance >= baseAmount) {
+                // Allowance already sufficient — go straight to challenge
+                setSending(false);
+                await executeChallenge();
+                return;
+            }
+
+            // Broadcast approval, then poll until it confirms
+            const delta      = baseAmount - currentAllowance;
+            const approveSim = await pillContract.increaseAllowance(streakAddr, delta);
+            await sendTx(approveSim as Parameters<typeof sendTx>[0], address);
+            setSending(false);
+            addToast('Approval sent — waiting for Bitcoin confirmation…');
+
+            // Poll allowance every 15 s; auto-send challenge once confirmed
+            stopApprovePoll();
+            approvePollRef.current = setInterval(async () => {
+                try {
+                    const p2         = new JSONRpcProvider({ url: RPC_URL, network: NETWORK });
+                    const sa2        = await p2.getPublicKeyInfo(address, false);
+                    const sk2        = await p2.getPublicKeyInfo(STREAK_SATS_ADDRESS!, true);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const pc2        = getContract(PILL_TOKEN_ADDRESS!, PILL_TOKEN_ABI, p2, NETWORK, sa2) as any;
+                    const ar2        = await pc2.allowance(sa2, sk2);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const confirmed  = BigInt(String((ar2 as any)?.properties?.remaining ?? 0n));
+                    if (confirmed >= baseAmount) {
+                        stopApprovePoll();
+                        addToast('Approval confirmed — sending challenge…');
+                        await executeChallenge();
+                    }
+                } catch { /* retry next tick */ }
+            }, 15_000);
+
+        } catch (err: unknown) {
+            setSending(false);
+            addToast(`Failed: ${err instanceof Error ? err.message : String(err)}`, 'error');
         }
     };
 

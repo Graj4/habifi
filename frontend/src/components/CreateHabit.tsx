@@ -111,18 +111,20 @@ export default function CreateHabit() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const pillContract = getContract(PILL_TOKEN_ADDRESS, PILL_TOKEN_ABI, provider, NETWORK, senderAddr) as any;
             const allowResult  = await pillContract.allowance(senderAddr, streakAddr);
-            const allowance    = (allowResult && typeof allowResult === 'object')
-                ? BigInt(String((allowResult as any).properties?.remaining ?? 0))
-                : 0n;
+            const allowProps   = (allowResult as any)?.properties;
+            // OP20 allowance may decode as `remaining` or `allowance` depending on ABI version
+            const rawAllowance = allowProps?.remaining ?? allowProps?.allowance ?? allowProps?.value ?? 0;
+            const allowance    = BigInt(String(rawAllowance));
 
             if (allowance < stakeRaw) {
-                // Need approval first
+                // Need approval — approve MaxUint256 so this is a one-time-ever step
+                const MAX_UINT256 = 2n ** 256n - 1n;
                 setLoadingMsg('Submitting PILL approval...');
-                const approveSim  = await pillContract.increaseAllowance(streakAddr, stakeRaw - allowance);
+                const approveSim  = await pillContract.increaseAllowance(streakAddr, MAX_UINT256 - allowance);
                 const approveTxId = await sendTx(approveSim, address);
                 setApprovalTxId(approveTxId ?? 'pending');
                 setFlowStep('approving');
-                addToast('Approval submitted! Wait ~2 min for Bitcoin confirmation.', 'success', approveTxId);
+                addToast('Approval submitted! After this confirms, all future habits are one-click.', 'success', approveTxId);
             } else {
                 // Allowance sufficient — skip approve step, create directly
                 setSkippedApproval(true);
@@ -138,7 +140,9 @@ export default function CreateHabit() {
             }
         } catch (err: unknown) {
             addToast(`Failed: ${err instanceof Error ? err.message : String(err)}`, 'error');
-            if (flowStep !== 'configure') setFlowStep('configure');
+            // Always reset to configure — flowStep is a stale closure here so don't read it
+            setFlowStep('configure');
+            setSkippedApproval(false);
         } finally {
             setLoading(false);
             setLoadingMsg('');
@@ -380,6 +384,26 @@ export default function CreateHabit() {
 
                         <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12 }}>
                             Confirmed on Bitcoin L1 · Gas ~330 sats
+                            {' '}
+                            <span
+                                title="First time? You'll sign a one-time PILL approval tx, then immediately create your habit. After that, all habits are one-click — no more approvals."
+                                style={{
+                                    display:        'inline-flex',
+                                    alignItems:     'center',
+                                    justifyContent: 'center',
+                                    width:          15,
+                                    height:         15,
+                                    borderRadius:   '50%',
+                                    border:         '1px solid var(--text-dim)',
+                                    color:          'var(--text-dim)',
+                                    fontSize:       10,
+                                    cursor:         'help',
+                                    verticalAlign:  'middle',
+                                    userSelect:     'none',
+                                }}
+                            >
+                                ?
+                            </span>
                         </p>
                     </div>
                 )}
@@ -391,10 +415,10 @@ export default function CreateHabit() {
                     <div className="step-content">
                         <div className="info-box" style={{ marginBottom: 20 }}>
                             <div style={{ fontWeight: 700, marginBottom: 6, color: 'var(--text)', fontSize: 14 }}>
-                                PILL Approval Pending
+                                One-Time PILL Approval
                             </div>
-                            Your approval transaction is confirming on Bitcoin (~2 min on testnet).
-                            Once it lands, click <strong>Continue</strong> to create your habit.
+                            This is a one-time setup. Once confirmed (~2 min), all future habits
+                            will be created in a single click — no more approvals needed.
                         </div>
 
                         {/* Habit summary */}

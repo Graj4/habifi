@@ -283,7 +283,7 @@ export default function Dashboard() {
                         />
                     </div>
                     <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 6 }}>
-                        For $MOTO airdrop snapshot
+                        For $MOTO airdrop snapshot · only if HabiFi wins MotoCat
                     </div>
                 </div>
 

@@ -40,7 +40,7 @@ export default function CheckIn() {
     }
 
     const habit     = selectedHabit;
-    const habitLabel = `Habit #${selectedHabitIdx + 1}`;
+    const habitLabel = habit.name || `Habit #${selectedHabitIdx + 1}`;
 
     // ── Derived values ──────────────────────────────────────────────────────
     const isFirstCheckIn = habit.lastCheckIn === 0;

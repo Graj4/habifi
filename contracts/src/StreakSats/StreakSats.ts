@@ -367,12 +367,12 @@ export class StreakSats extends OP_NET {
         const frequency: u64    = this._getHabitU256(hid, FIELD_FREQUENCY).lo1;
         const currentBlock: u64 = Blockchain.block.number;
 
-        // Window opens after one frequency period from last check-in (or creation)
-        const windowStart: u64 = lastCheckIn !== 0
-            ? lastCheckIn + frequency
-            : this._getHabitU256(hid, FIELD_CREATED_AT).lo1 + frequency;
-
-        if (currentBlock < windowStart) throw new Revert('Check-in window not yet open');
+        // First check-in is always allowed immediately after habit creation.
+        // Subsequent check-ins must wait one frequency period from the last check-in.
+        if (lastCheckIn !== 0) {
+            const windowStart: u64 = lastCheckIn + frequency;
+            if (currentBlock < windowStart) throw new Revert('Check-in window not yet open');
+        }
 
         this._settle(sender);
 
@@ -781,7 +781,7 @@ export class StreakSats extends OP_NET {
         const habitId: u256 = calldata.readU256();
         const hid: u64      = habitId.lo1;
         const name: string  = new StoredString(PTR_HABIT_NAME, hid).value;
-        const resp = new BytesWriter(name.length + 4);
+        const resp = new BytesWriter(name.length * 4 + 4);
         resp.writeStringWithLength(name);
         return resp;
     }

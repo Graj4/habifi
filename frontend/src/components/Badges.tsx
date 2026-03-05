@@ -236,7 +236,7 @@ export default function Badges() {
                         )}
 
                         <div style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                            +1 Mile per check-in · Snapshotted for $MOTO airdrop priority
+                            +1 Mile per check-in · Snapshotted for $MOTO airdrop priority (if HabiFi wins MotoCat)
                         </div>
                     </div>
 
@@ -305,9 +305,9 @@ export default function Badges() {
                         </div>
                         <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.65, maxWidth: 520 }}>
                             $MOTO is the native token of the OP_NET ecosystem — the Bitcoin L1 smart contract
-                            platform that powers HabiFi. Every check-in you complete earns Moto Miles, which
-                            are snapshotted for priority allocation in the upcoming $MOTO token airdrop.
-                            Higher tier = higher priority.
+                            platform that powers HabiFi. Every check-in earns Moto Miles, which will be
+                            snapshotted for priority allocation in the $MOTO airdrop <strong style={{ color: 'var(--text)' }}>if HabiFi wins the MotoCat contest</strong>.
+                            Higher tier = higher priority. Start earning now — miles are accumulating regardless.
                         </div>
                     </div>
                     <a
