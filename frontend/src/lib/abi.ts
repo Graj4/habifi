@@ -122,6 +122,79 @@ export const STREAK_SATS_ABI: BitcoinInterfaceAbi = ([
         inputs:  [{ name: 'user',    type: ABIDataTypes.ADDRESS }],
         outputs: [{ name: 'pending', type: ABIDataTypes.UINT256 }],
     },
+    // ── Group Habit Pools ──────────────────────────────────────────────────────
+    {
+        type: F, name: 'createGroupHabit',
+        inputs: [
+            { name: 'name',         type: ABIDataTypes.STRING  },
+            { name: 'frequency',    type: ABIDataTypes.STRING  },
+            { name: 'durationDays', type: ABIDataTypes.UINT256 },
+            { name: 'minStake',     type: ABIDataTypes.UINT256 },
+            { name: 'maxPlayers',   type: ABIDataTypes.UINT256 },
+        ],
+        outputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+    },
+    {
+        type: F, name: 'joinGroupHabit',
+        inputs: [
+            { name: 'groupId',     type: ABIDataTypes.UINT256 },
+            { name: 'stakeAmount', type: ABIDataTypes.UINT256 },
+        ],
+        outputs: [],
+    },
+    {
+        type: F, name: 'startGroupHabit',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+    },
+    {
+        type: F, name: 'cancelGroupHabit',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+    },
+    {
+        type: F, name: 'checkInGroup',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+    },
+    {
+        type: F, name: 'eliminateGroupMember',
+        inputs: [
+            { name: 'groupId',       type: ABIDataTypes.UINT256 },
+            { name: 'memberAddress', type: ABIDataTypes.ADDRESS  },
+        ],
+        outputs: [],
+    },
+    {
+        type: F, name: 'claimGroupWinnings',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'claimed', type: ABIDataTypes.UINT256 }],
+    },
+    {
+        type: F, name: 'getGroupInfo',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [
+            { name: 'frequency',     type: ABIDataTypes.UINT256 },
+            { name: 'duration',      type: ABIDataTypes.UINT256 },
+            { name: 'minStake',      type: ABIDataTypes.UINT256 },
+            { name: 'maxPlayers',    type: ABIDataTypes.UINT256 },
+            { name: 'status',        type: ABIDataTypes.UINT256 },
+            { name: 'startBlock',    type: ABIDataTypes.UINT256 },
+            { name: 'totalPool',     type: ABIDataTypes.UINT256 },
+            { name: 'memberCount',   type: ABIDataTypes.UINT256 },
+            { name: 'survivorCount', type: ABIDataTypes.UINT256 },
+        ],
+    },
+    {
+        type: F, name: 'getGroupMembers',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'members', type: ABIDataTypes.BYTES32 }],
+    },
+    {
+        type: F, name: 'getGroupName',
+        inputs:  [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'name',    type: ABIDataTypes.STRING  }],
+    },
 ] as unknown) as BitcoinInterfaceAbi;
 
 // ── PILL token ABI (OP20 subset) ─────────────────────────────────────────────

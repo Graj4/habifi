@@ -7,7 +7,7 @@ export const RPC_URL = 'https://testnet.opnet.org';
 // Replace these with your deployed contract addresses after running:
 //   npm run build  (in /contracts)
 //   deploy via OP_WALLET
-export const STREAK_SATS_ADDRESS  = 'opt1sqzxdtk7qn76k0w3zaa3lpnt08xssjyk32yq7230c';
+export const STREAK_SATS_ADDRESS  = 'opt1sqracc6cpqus9p9z2yl9zufjtmuctpthejs7e6jzz';
 export const STREAK_BADGE_ADDRESS = 'opt1sqpjskj277j0vsh034y82zvyyeljv0c5hsvlswjuh';
 export const PILL_TOKEN_ADDRESS   = '0xb09fc29c112af8293539477e23d8df1d3126639642767d707277131352040cbb';
 
