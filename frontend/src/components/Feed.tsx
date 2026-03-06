@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getContract, JSONRpcProvider } from 'opnet';
 import { STREAK_SATS_ADDRESS, NETWORK, RPC_URL, formatAddress, formatPill } from '../lib/config';
 import { STREAK_SATS_ABI } from '../lib/abi';
+import { LeaderboardContent } from './Leaderboard';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface FeedEntry {
@@ -128,6 +129,7 @@ function blockAgo(block: number, currentBlock: number): string {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function Feed() {
+    const [tab,          setTab]          = useState<'feed' | 'leaderboard'>('feed');
     const [entries,      setEntries]      = useState<FeedEntry[]>([]);
     const [loading,      setLoading]      = useState(true);
     const [currentBlock, setCurrentBlock] = useState(0);
@@ -162,31 +164,43 @@ export default function Feed() {
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
             {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 24, gap: 12, flexWrap: 'wrap' }}>
-                <div>
-                    <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>Community Feed</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-                        Live activity from the top streakers on Bitcoin L1
-                    </p>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    {lastRefresh && (
-                        <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>
-                            Updated {lastRefresh.toLocaleTimeString()}
-                        </span>
-                    )}
+            <div style={{ marginBottom: 24 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>Community</h1>
+                <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
+                    Live activity and leaderboard from Bitcoin L1
+                </p>
+            </div>
+
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+                {(['feed', 'leaderboard'] as const).map(t => (
+                    <button
+                        key={t}
+                        className="btn btn-sm"
+                        onClick={() => setTab(t)}
+                        style={{
+                            background: tab === t ? 'var(--primary)' : 'var(--bg3)',
+                            color:      tab === t ? '#fff' : 'var(--text-muted)',
+                            border:     '1px solid ' + (tab === t ? 'var(--primary)' : 'var(--border2)'),
+                            fontWeight: tab === t ? 700 : 500,
+                        }}
+                    >
+                        {t === 'feed' ? '📡 Activity' : '🏆 Leaderboard'}
+                    </button>
+                ))}
+                {tab === 'feed' && (
                     <button
                         className="btn btn-ghost btn-sm"
                         onClick={() => void load()}
                         disabled={loading}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                        style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}
                     >
                         {loading ? <span className="spinner" /> : '↻'} Refresh
                     </button>
-                </div>
+                )}
             </div>
 
-            {loading && entries.length === 0 ? (
+            {tab === 'leaderboard' ? <LeaderboardContent /> : loading && entries.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: 64, color: 'var(--text-dim)' }}>
                     <div className="spinner" style={{ margin: '0 auto 16px', width: 32, height: 32 }} />
                     <div style={{ fontWeight: 600 }}>Loading community activity…</div>
@@ -278,7 +292,7 @@ export default function Feed() {
             )}
 
             {/* Footer note */}
-            {entries.length > 0 && (
+            {tab === 'feed' && entries.length > 0 && (
                 <div style={{ textAlign: 'center', marginTop: 24, fontSize: 12, color: 'var(--text-dim)' }}>
                     Showing activity from top {entries.length} active habits · Updates every 60s
                 </div>

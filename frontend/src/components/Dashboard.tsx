@@ -4,6 +4,7 @@ import { useApp } from '../App';
 import { useUserHabits, useMotoMiles, usePendingYield, useCurrentBlock, sendTx, type HabitInfo } from '../lib/hooks';
 import { STREAK_SATS_ABI } from '../lib/abi';
 import { STREAK_SATS_ADDRESS, NETWORK, RPC_URL, BADGE_MILESTONES, getMotoTier, formatPill } from '../lib/config';
+import { BadgesContent } from './Badges';
 
 function BlocksUntilDeadline({ lastCheckIn, frequency, currentBlock }: { lastCheckIn: number; frequency: number; currentBlock: number }) {
     if (lastCheckIn === 0) return <span style={{ color: 'var(--green)' }}>✓ First check-in ready!</span>;
@@ -168,6 +169,7 @@ export default function Dashboard() {
     const { pending, refresh: refreshYield } = usePendingYield(address);
     const currentBlock = Number(useCurrentBlock()); // guard: opnet resolves bigint at runtime
     const [claimLoading, setClaimLoading] = useState(false);
+    const [tab, setTab] = useState<'habits' | 'badges'>('habits');
 
     // Derive recent activity from on-chain habit state — no extra contract calls needed
     const activityItems = (() => { try { return habits.flatMap((h, idx) => {
@@ -235,18 +237,40 @@ export default function Dashboard() {
     return (
         <div className="container section">
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                 <h2>My Dashboard</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
-                    <button className="btn btn-secondary btn-sm" onClick={refresh} disabled={habitsLoading}>
-                        {habitsLoading ? <><span className="spinner" style={{ width: 14, height: 14 }} />Refreshing…</> : '↻ Refresh'}
-                    </button>
+                    {tab === 'habits' && (
+                        <button className="btn btn-secondary btn-sm" onClick={refresh} disabled={habitsLoading}>
+                            {habitsLoading ? <><span className="spinner" style={{ width: 14, height: 14 }} />Refreshing…</> : '↻ Refresh'}
+                        </button>
+                    )}
                     <button className="btn btn-primary" onClick={() => setPage('create')}>
                         + New Habit
                     </button>
                 </div>
             </div>
 
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 28 }}>
+                {(['habits', 'badges'] as const).map(t => (
+                    <button
+                        key={t}
+                        className="btn btn-sm"
+                        onClick={() => setTab(t)}
+                        style={{
+                            background: tab === t ? 'var(--primary)' : 'var(--bg3)',
+                            color:      tab === t ? '#fff' : 'var(--text-muted)',
+                            border:     '1px solid ' + (tab === t ? 'var(--primary)' : 'var(--border2)'),
+                            fontWeight: tab === t ? 700 : 500,
+                        }}
+                    >
+                        {t === 'habits' ? '⚡ My Habits' : '🏅 Badges'}
+                    </button>
+                ))}
+            </div>
+
+            {tab === 'badges' ? <BadgesContent /> : <>
             {/* Summary cards */}
             <div className="grid-3" style={{ marginBottom: 32 }}>
                 {/* Claimable yield */}
@@ -296,7 +320,7 @@ export default function Dashboard() {
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12 }}>
                         Total: {habits.reduce((s, h) => s + h.streak, 0)} streak-days
                     </div>
-                    <button className="btn btn-secondary btn-full" onClick={() => setPage('badges')}>
+                    <button className="btn btn-secondary btn-full" onClick={() => setTab('badges')}>
                         View Badges
                     </button>
                 </div>
@@ -362,6 +386,7 @@ export default function Dashboard() {
                     ))}
                 </div>
             </div>
+            </>}
         </div>
     );
 }
