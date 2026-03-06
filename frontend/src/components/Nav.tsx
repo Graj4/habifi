@@ -83,7 +83,7 @@ export default function Nav() {
                 {/* Wallet */}
                 <div style={{ flexShrink: 0 }}>
                     {connected && address ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{
                                 background:   'var(--bg3)',
                                 border:       '1px solid var(--border2)',
@@ -104,6 +104,12 @@ export default function Nav() {
                                 }} />
                                 <span className="mono">{formatAddress(address)}</span>
                             </div>
+                            <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => setPage('create')}
+                            >
+                                + Habit
+                            </button>
                             <button
                                 className="btn btn-ghost btn-sm"
                                 onClick={disconnectWallet}

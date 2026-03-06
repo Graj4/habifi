@@ -24,10 +24,7 @@ import Home from './components/Home';
 import CreateHabit from './components/CreateHabit';
 import CheckIn from './components/CheckIn';
 import Dashboard from './components/Dashboard';
-import Leaderboard from './components/Leaderboard';
 import Challenge from './components/Challenge';
-import Badges from './components/Badges';
-import Admin from './components/Admin';
 import GroupHabits from './components/GroupHabits';
 import Feed from './components/Feed';
 
@@ -78,16 +75,14 @@ export default function App() {
 
     const renderPage = () => {
         switch (page) {
-            case 'feed':        return <Feed />;
-            case 'create':      return <CreateHabit />;
-            case 'checkin':     return <CheckIn />;
-            case 'dashboard':   return <Dashboard />;
-            case 'leaderboard': return <Leaderboard />;
-            case 'challenge':   return <Challenge />;
-            case 'badges':      return <Badges />;
-            case 'groups':      return <GroupHabits />;
-            case 'admin':       return <Home />;
-            default:            return <Home />;
+            case 'community':
+            case 'feed':      return <Feed />;
+            case 'create':    return <CreateHabit />;
+            case 'checkin':   return <CheckIn />;
+            case 'dashboard': return <Dashboard />;
+            case 'challenge': return <Challenge />;
+            case 'groups':    return <GroupHabits />;
+            default:          return <Home />;
         }
     };
 
