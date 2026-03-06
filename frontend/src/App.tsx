@@ -29,6 +29,7 @@ import Challenge from './components/Challenge';
 import Badges from './components/Badges';
 import Admin from './components/Admin';
 import GroupHabits from './components/GroupHabits';
+import Feed from './components/Feed';
 
 // ─── App-wide context ─────────────────────────────────────────────────────────
 interface AppContextType {
@@ -77,6 +78,7 @@ export default function App() {
 
     const renderPage = () => {
         switch (page) {
+            case 'feed':        return <Feed />;
             case 'create':      return <CreateHabit />;
             case 'checkin':     return <CheckIn />;
             case 'dashboard':   return <Dashboard />;
