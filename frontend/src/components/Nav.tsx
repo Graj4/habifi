@@ -2,7 +2,6 @@ import { useApp } from '../App';
 import { formatAddress } from '../lib/config';
 
 const NAV_ITEMS = [
-    { id: 'home',        label: 'Home'        },
     { id: 'feed',        label: 'Feed'        },
     { id: 'dashboard',   label: 'Dashboard'   },
     { id: 'leaderboard', label: 'Leaderboard' },
