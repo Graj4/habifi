@@ -2,12 +2,10 @@ import { useApp } from '../App';
 import { formatAddress } from '../lib/config';
 
 const NAV_ITEMS = [
-    { id: 'feed',        label: 'Feed'        },
-    { id: 'dashboard',   label: 'Dashboard'   },
-    { id: 'leaderboard', label: 'Leaderboard' },
-    { id: 'challenge',   label: 'Challenge'   },
-    { id: 'groups',      label: 'Groups'      },
-    { id: 'badges',      label: 'Badges'      },
+    { id: 'community',  label: 'Community'  },
+    { id: 'dashboard',  label: 'Dashboard'  },
+    { id: 'challenge',  label: 'Challenge'  },
+    { id: 'groups',     label: 'Groups'     },
 ] as const;
 
 export default function Nav() {
@@ -106,12 +104,6 @@ export default function Nav() {
                                 }} />
                                 <span className="mono">{formatAddress(address)}</span>
                             </div>
-                            <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => setPage('create')}
-                            >
-                                + New Habit
-                            </button>
                             <button
                                 className="btn btn-ghost btn-sm"
                                 onClick={disconnectWallet}
