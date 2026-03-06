@@ -10,7 +10,7 @@ const NAV_ITEMS = [
 ] as const;
 
 export default function Nav() {
-    const { page, setPage, address, connected, connectWallet, walletLoading } = useApp();
+    const { page, setPage, address, connected, connectWallet, disconnectWallet, walletLoading } = useApp();
 
     return (
         <nav style={{
@@ -110,6 +110,13 @@ export default function Nav() {
                                 onClick={() => setPage('create')}
                             >
                                 + New Habit
+                            </button>
+                            <button
+                                className="btn btn-ghost btn-sm"
+                                onClick={disconnectWallet}
+                                style={{ color: 'var(--text-dim)', fontSize: 12 }}
+                            >
+                                Disconnect
                             </button>
                         </div>
                     ) : (

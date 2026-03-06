@@ -36,6 +36,7 @@ interface AppContextType {
     address: string | null;
     connected: boolean;
     connectWallet: () => void;
+    disconnectWallet: () => void;
     walletLoading: boolean;
     addToast: (msg: string, type?: 'success' | 'error', txId?: string) => void;
     selectedHabit: HabitInfo | null;
@@ -55,7 +56,7 @@ export default function App() {
     const [toasts, setToasts] = useState<Toast[]>([]);
     const [selectedHabit,    setSelectedHabit]    = useState<HabitInfo | null>(null);
     const [selectedHabitIdx, setSelectedHabitIdx] = useState(0);
-    const { address, connected, loading: walletLoading, connect } = useWallet();
+    const { address, connected, loading: walletLoading, connect, disconnect } = useWallet();
 
     const addToast = (msg: string, type: 'success' | 'error' = 'success', txId?: string) => {
         const id = Date.now();
@@ -66,6 +67,7 @@ export default function App() {
     const ctx: AppContextType = {
         page, setPage, address, connected,
         connectWallet: connect,
+        disconnectWallet: disconnect,
         walletLoading,
         addToast,
         selectedHabit,    setSelectedHabit,
