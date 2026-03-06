@@ -103,20 +103,22 @@ export default function Nav() {
                                     boxShadow:    '0 0 6px var(--green)',
                                 }} />
                                 <span className="mono">{formatAddress(address)}</span>
+                                <span style={{ width: 1, height: 14, background: 'var(--border2)', margin: '0 2px' }} />
+                                <button
+                                    onClick={disconnectWallet}
+                                    style={{
+                                        background: 'none',
+                                        border:     'none',
+                                        cursor:     'pointer',
+                                        color:      'var(--text-dim)',
+                                        fontSize:   11,
+                                        padding:    0,
+                                        fontWeight: 600,
+                                    }}
+                                >
+                                    Disconnect
+                                </button>
                             </div>
-                            <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => setPage('create')}
-                            >
-                                + Habit
-                            </button>
-                            <button
-                                className="btn btn-ghost btn-sm"
-                                onClick={disconnectWallet}
-                                style={{ color: 'var(--text-dim)', fontSize: 12 }}
-                            >
-                                Disconnect
-                            </button>
                         </div>
                     ) : (
                         <button
