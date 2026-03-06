@@ -50,6 +50,48 @@ export const StreakSatsEvents = [
         values: [{ name: 'challengeId', type: ABIDataTypes.UINT256 }],
         type: BitcoinAbiTypes.Event,
     },
+    {
+        name: 'GroupCreated',
+        values: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'creator', type: ABIDataTypes.UINT256 },
+            { name: 'maxPlayers', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Event,
+    },
+    {
+        name: 'GroupMemberJoined',
+        values: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'member', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Event,
+    },
+    {
+        name: 'GroupStarted',
+        values: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'memberCount', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Event,
+    },
+    {
+        name: 'GroupMemberEliminated',
+        values: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'member', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Event,
+    },
+    {
+        name: 'GroupWinnersClaimed',
+        values: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'winner', type: ABIDataTypes.UINT256 },
+            { name: 'amount', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Event,
+    },
 ];
 
 export const StreakSatsAbi = [
@@ -113,6 +155,94 @@ export const StreakSatsAbi = [
         type: BitcoinAbiTypes.Function,
     },
     {
+        name: 'cancelChallenge',
+        inputs: [{ name: 'challengeId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'createGroupHabit',
+        inputs: [
+            { name: 'name', type: ABIDataTypes.STRING },
+            { name: 'frequency', type: ABIDataTypes.STRING },
+            { name: 'durationDays', type: ABIDataTypes.UINT256 },
+            { name: 'minStake', type: ABIDataTypes.UINT256 },
+            { name: 'maxPlayers', type: ABIDataTypes.UINT256 },
+        ],
+        outputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'joinGroupHabit',
+        inputs: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'stakeAmount', type: ABIDataTypes.UINT256 },
+        ],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'startGroupHabit',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'cancelGroupHabit',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'checkInGroup',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'eliminateGroupMember',
+        inputs: [
+            { name: 'groupId', type: ABIDataTypes.UINT256 },
+            { name: 'memberAddress', type: ABIDataTypes.ADDRESS },
+        ],
+        outputs: [],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'claimGroupWinnings',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'claimed', type: ABIDataTypes.UINT256 }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'getGroupInfo',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [
+            { name: 'frequency', type: ABIDataTypes.UINT256 },
+            { name: 'duration', type: ABIDataTypes.UINT256 },
+            { name: 'minStake', type: ABIDataTypes.UINT256 },
+            { name: 'maxPlayers', type: ABIDataTypes.UINT256 },
+            { name: 'status', type: ABIDataTypes.UINT256 },
+            { name: 'startBlock', type: ABIDataTypes.UINT256 },
+            { name: 'totalPool', type: ABIDataTypes.UINT256 },
+            { name: 'memberCount', type: ABIDataTypes.UINT256 },
+            { name: 'survivorCount', type: ABIDataTypes.UINT256 },
+        ],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'getGroupMembers',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'members', type: ABIDataTypes.BYTES32 }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
+        name: 'getGroupName',
+        inputs: [{ name: 'groupId', type: ABIDataTypes.UINT256 }],
+        outputs: [{ name: 'name', type: ABIDataTypes.STRING }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
         name: 'getChallengeInfo',
         inputs: [{ name: 'challengeId', type: ABIDataTypes.UINT256 }],
         outputs: [
@@ -129,12 +259,6 @@ export const StreakSatsAbi = [
         name: 'getIncomingChallenges',
         inputs: [{ name: 'user', type: ABIDataTypes.ADDRESS }],
         outputs: [{ name: 'challengeIds', type: ABIDataTypes.BYTES32 }],
-        type: BitcoinAbiTypes.Function,
-    },
-    {
-        name: 'cancelChallenge',
-        inputs: [{ name: 'challengeId', type: ABIDataTypes.UINT256 }],
-        outputs: [],
         type: BitcoinAbiTypes.Function,
     },
     {

@@ -31,6 +31,28 @@ export type ChallengeIssuedEvent = {
 export type ChallengeAcceptedEvent = {
     readonly challengeId: bigint;
 };
+export type GroupCreatedEvent = {
+    readonly groupId: bigint;
+    readonly creator: bigint;
+    readonly maxPlayers: bigint;
+};
+export type GroupMemberJoinedEvent = {
+    readonly groupId: bigint;
+    readonly member: bigint;
+};
+export type GroupStartedEvent = {
+    readonly groupId: bigint;
+    readonly memberCount: bigint;
+};
+export type GroupMemberEliminatedEvent = {
+    readonly groupId: bigint;
+    readonly member: bigint;
+};
+export type GroupWinnersClaimedEvent = {
+    readonly groupId: bigint;
+    readonly winner: bigint;
+    readonly amount: bigint;
+};
 
 // ------------------------------------------------------------------
 // Call Results
@@ -102,6 +124,94 @@ export type Challenge = CallResult<
 export type AcceptChallenge = CallResult<{}, OPNetEvent<ChallengeAcceptedEvent>[]>;
 
 /**
+ * @description Represents the result of the cancelChallenge function call.
+ */
+export type CancelChallenge = CallResult<{}, OPNetEvent<never>[]>;
+
+/**
+ * @description Represents the result of the createGroupHabit function call.
+ */
+export type CreateGroupHabit = CallResult<
+    {
+        groupId: bigint;
+    },
+    OPNetEvent<GroupCreatedEvent>[]
+>;
+
+/**
+ * @description Represents the result of the joinGroupHabit function call.
+ */
+export type JoinGroupHabit = CallResult<{}, OPNetEvent<GroupMemberJoinedEvent>[]>;
+
+/**
+ * @description Represents the result of the startGroupHabit function call.
+ */
+export type StartGroupHabit = CallResult<{}, OPNetEvent<GroupStartedEvent>[]>;
+
+/**
+ * @description Represents the result of the cancelGroupHabit function call.
+ */
+export type CancelGroupHabit = CallResult<{}, OPNetEvent<never>[]>;
+
+/**
+ * @description Represents the result of the checkInGroup function call.
+ */
+export type CheckInGroup = CallResult<{}, OPNetEvent<never>[]>;
+
+/**
+ * @description Represents the result of the eliminateGroupMember function call.
+ */
+export type EliminateGroupMember = CallResult<{}, OPNetEvent<GroupMemberEliminatedEvent>[]>;
+
+/**
+ * @description Represents the result of the claimGroupWinnings function call.
+ */
+export type ClaimGroupWinnings = CallResult<
+    {
+        claimed: bigint;
+    },
+    OPNetEvent<GroupWinnersClaimedEvent>[]
+>;
+
+/**
+ * @description Represents the result of the getGroupInfo function call.
+ */
+export type GetGroupInfo = CallResult<
+    {
+        frequency: bigint;
+        duration: bigint;
+        minStake: bigint;
+        maxPlayers: bigint;
+        status: bigint;
+        startBlock: bigint;
+        totalPool: bigint;
+        memberCount: bigint;
+        survivorCount: bigint;
+    },
+    OPNetEvent<never>[]
+>;
+
+/**
+ * @description Represents the result of the getGroupMembers function call.
+ */
+export type GetGroupMembers = CallResult<
+    {
+        members: Uint8Array;
+    },
+    OPNetEvent<never>[]
+>;
+
+/**
+ * @description Represents the result of the getGroupName function call.
+ */
+export type GetGroupName = CallResult<
+    {
+        name: string;
+    },
+    OPNetEvent<never>[]
+>;
+
+/**
  * @description Represents the result of the getChallengeInfo function call.
  */
 export type GetChallengeInfo = CallResult<
@@ -125,11 +235,6 @@ export type GetIncomingChallenges = CallResult<
     },
     OPNetEvent<never>[]
 >;
-
-/**
- * @description Represents the result of the cancelChallenge function call.
- */
-export type CancelChallenge = CallResult<{}, OPNetEvent<never>[]>;
 
 /**
  * @description Represents the result of the getLeaderboard function call.
@@ -220,9 +325,25 @@ export interface IStreakSats extends IOP_NETContract {
     sponsor(amount: bigint): Promise<Sponsor>;
     challenge(friendAddress: Address, multiplier: bigint, baseAmount: bigint): Promise<Challenge>;
     acceptChallenge(challengeId: bigint): Promise<AcceptChallenge>;
+    cancelChallenge(challengeId: bigint): Promise<CancelChallenge>;
+    createGroupHabit(
+        name: string,
+        frequency: string,
+        durationDays: bigint,
+        minStake: bigint,
+        maxPlayers: bigint,
+    ): Promise<CreateGroupHabit>;
+    joinGroupHabit(groupId: bigint, stakeAmount: bigint): Promise<JoinGroupHabit>;
+    startGroupHabit(groupId: bigint): Promise<StartGroupHabit>;
+    cancelGroupHabit(groupId: bigint): Promise<CancelGroupHabit>;
+    checkInGroup(groupId: bigint): Promise<CheckInGroup>;
+    eliminateGroupMember(groupId: bigint, memberAddress: Address): Promise<EliminateGroupMember>;
+    claimGroupWinnings(groupId: bigint): Promise<ClaimGroupWinnings>;
+    getGroupInfo(groupId: bigint): Promise<GetGroupInfo>;
+    getGroupMembers(groupId: bigint): Promise<GetGroupMembers>;
+    getGroupName(groupId: bigint): Promise<GetGroupName>;
     getChallengeInfo(challengeId: bigint): Promise<GetChallengeInfo>;
     getIncomingChallenges(user: Address): Promise<GetIncomingChallenges>;
-    cancelChallenge(challengeId: bigint): Promise<CancelChallenge>;
     getLeaderboard(): Promise<GetLeaderboard>;
     getMotoMiles(user: Address): Promise<GetMotoMiles>;
     getUserHabits(user: Address): Promise<GetUserHabits>;

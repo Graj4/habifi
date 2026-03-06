@@ -145,6 +145,230 @@
             "outputs": []
         },
         {
+            "name": "cancelChallenge",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "createGroupHabit",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                },
+                {
+                    "name": "frequency",
+                    "type": "STRING"
+                },
+                {
+                    "name": "durationDays",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "minStake",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "maxPlayers",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "joinGroupHabit",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "stakeAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "startGroupHabit",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "cancelGroupHabit",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "checkInGroup",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "eliminateGroupMember",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "memberAddress",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "claimGroupWinnings",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "claimed",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getGroupInfo",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "frequency",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "duration",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "minStake",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "maxPlayers",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "status",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "startBlock",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "totalPool",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "memberCount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "survivorCount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getGroupMembers",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "members",
+                    "type": "BYTES32"
+                }
+            ]
+        },
+        {
+            "name": "getGroupName",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "name",
+                    "type": "STRING"
+                }
+            ]
+        },
+        {
             "name": "getChallengeInfo",
             "type": "Function",
             "payable": false,
@@ -199,19 +423,6 @@
                     "type": "BYTES32"
                 }
             ]
-        },
-        {
-            "name": "cancelChallenge",
-            "type": "Function",
-            "payable": false,
-            "onlyOwner": false,
-            "inputs": [
-                {
-                    "name": "challengeId",
-                    "type": "UINT256"
-                }
-            ],
-            "outputs": []
         },
         {
             "name": "getLeaderboard",
@@ -448,6 +659,84 @@
             "values": [
                 {
                     "name": "challengeId",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "GroupCreated",
+            "values": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "creator",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "maxPlayers",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "GroupMemberJoined",
+            "values": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "member",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "GroupStarted",
+            "values": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "memberCount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "GroupMemberEliminated",
+            "values": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "member",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "GroupWinnersClaimed",
+            "values": [
+                {
+                    "name": "groupId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "winner",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "amount",
                     "type": "UINT256"
                 }
             ],
