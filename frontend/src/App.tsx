@@ -80,7 +80,7 @@ export default function App() {
             case 'leaderboard': return <Leaderboard />;
             case 'challenge':   return <Challenge />;
             case 'badges':      return <Badges />;
-            case 'admin':       return <Admin />;
+            case 'admin':       return <Home />;
             default:            return <Home />;
         }
     };
