@@ -195,6 +195,7 @@ export default function GroupHabits() {
     const [members,      setMembers]      = useState<MemberInfo[]>([]);
     const [loadingDetail,setLoadingDetail]= useState(false);
     const [mining,       setMining]       = useState('');
+    const [isCreator,    setIsCreator]    = useState(false);
     const mountedRef = useRef(true);
     useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; }; }, []);
 
@@ -213,14 +214,27 @@ export default function GroupHabits() {
 
     // ── Detail: load members when group selected ────────────────────────────────
     useEffect(() => {
-        if (selectedId === null) return;
+        if (selectedId === null) { setIsCreator(false); return; }
         const grp = groups.find(g => g.id === selectedId);
         if (!grp) return;
         setLoadingDetail(true);
+        setIsCreator(false);
         fetchGroupMembers(selectedId, grp.memberCount)
-            .then(m => { if (mountedRef.current) { setMembers(m); setLoadingDetail(false); } })
+            .then(async m => {
+                if (!mountedRef.current) return;
+                setMembers(m);
+                setLoadingDetail(false);
+                if (address && m.length > 0) {
+                    try {
+                        const provider    = getProvider();
+                        const senderInfo  = await provider.getPublicKeyInfo(address, false);
+                        const creatorInfo = await provider.getPublicKeyInfo(m[0].address, false);
+                        if (mountedRef.current) setIsCreator(senderInfo.equals(creatorInfo));
+                    } catch { /* not creator */ }
+                }
+            })
             .catch(() => { if (mountedRef.current) setLoadingDetail(false); });
-    }, [selectedId, groups]);
+    }, [selectedId, groups, address]);
 
     // ── Create form state ───────────────────────────────────────────────────────
     const [cName,     setCName]     = useState('');
@@ -552,12 +566,12 @@ export default function GroupHabits() {
                                     Join ({formatPill(selectedGroup.minStake)})
                                 </button>
                             )}
-                            {selectedGroup.status === GROUP_OPEN && selectedGroup.memberCount >= 2 && (
+                            {isCreator && selectedGroup.status === GROUP_OPEN && selectedGroup.memberCount >= 2 && (
                                 <button className="btn btn-sm" style={{ background: 'var(--green)', color: '#000', fontWeight: 700 }} onClick={() => handleStart(selectedGroup)}>
                                     Start Game
                                 </button>
                             )}
-                            {selectedGroup.status === GROUP_OPEN && (
+                            {isCreator && selectedGroup.status === GROUP_OPEN && (
                                 <button className="btn btn-ghost btn-sm" style={{ color: 'var(--red)' }} onClick={() => handleCancel(selectedGroup)}>
                                     Cancel Group
                                 </button>
