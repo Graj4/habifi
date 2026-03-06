@@ -7,12 +7,12 @@ const RANK_STYLE: Record<number, { bg: string; color: string; label: string }> =
     3: { bg: 'linear-gradient(135deg, #CD7F32, #A0522D)', color: '#fff', label: '🥉' },
 };
 
-export default function Leaderboard() {
+export function LeaderboardContent() {
     const { entries, loading, refresh } = useLeaderboard();
     const { setPage, connected, connectWallet } = useApp();
 
     return (
-        <div className="container section">
+        <div>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
                 <div>
@@ -174,4 +174,8 @@ export default function Leaderboard() {
             </p>
         </div>
     );
+}
+
+export default function Leaderboard() {
+    return <div className="container section"><LeaderboardContent /></div>;
 }

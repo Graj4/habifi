@@ -87,7 +87,7 @@ function BadgeCard({
     );
 }
 
-export default function Badges() {
+export function BadgesContent() {
     const { address, connected, connectWallet, setPage } = useApp();
     const { habits } = useUserHabits(address);
     const { miles }  = useMotoMiles(address);
@@ -99,7 +99,7 @@ export default function Badges() {
     const toNext     = nextTier ? nextTier.min - miles : 0;
 
     return (
-        <div className="container section">
+        <div>
             {/* ── Header ──────────────────────────────────────────────────── */}
             <h2 style={{ marginBottom: 8 }}>Achievement Badges</h2>
             <p style={{ marginBottom: 40 }}>
@@ -337,4 +337,8 @@ export default function Badges() {
             )}
         </div>
     );
+}
+
+export default function Badges() {
+    return <div className="container section"><BadgesContent /></div>;
 }
