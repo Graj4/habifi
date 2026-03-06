@@ -28,6 +28,7 @@ import Leaderboard from './components/Leaderboard';
 import Challenge from './components/Challenge';
 import Badges from './components/Badges';
 import Admin from './components/Admin';
+import GroupHabits from './components/GroupHabits';
 
 // ─── App-wide context ─────────────────────────────────────────────────────────
 interface AppContextType {
@@ -82,6 +83,7 @@ export default function App() {
             case 'leaderboard': return <Leaderboard />;
             case 'challenge':   return <Challenge />;
             case 'badges':      return <Badges />;
+            case 'groups':      return <GroupHabits />;
             case 'admin':       return <Home />;
             default:            return <Home />;
         }

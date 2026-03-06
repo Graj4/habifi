@@ -6,6 +6,7 @@ const NAV_ITEMS = [
     { id: 'dashboard',   label: 'Dashboard'   },
     { id: 'leaderboard', label: 'Leaderboard' },
     { id: 'challenge',   label: 'Challenge'   },
+    { id: 'groups',      label: 'Groups'      },
     { id: 'badges',      label: 'Badges'      },
 ] as const;
 
