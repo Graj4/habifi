@@ -255,8 +255,9 @@ export default function Home() {
                             </h1>
 
                             <p style={{ fontSize: 17, lineHeight: 1.75, maxWidth: 500, marginBottom: 16, color: 'var(--text-muted)' }}>
-                                Stake PILL on your habits. Miss a check-in and lose 10% of your stake.
-                                Keep your streak and earn yield from everyone who didn't.
+                                Stake PILL on your habits and earn yield just for staying consistent.
+                                Miss a check-in and lose 10% — that penalty gets redistributed to
+                                everyone still holding their streak.
                             </p>
                             <p style={{ fontSize: 14, color: 'var(--text-dim)', marginBottom: 40 }}>
                                 No bridges. No EVM. Fully native to Bitcoin L1 via OP_NET.
