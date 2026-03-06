@@ -237,15 +237,30 @@ export default function GroupHabits() {
         const streakInfo   = await provider.getPublicKeyInfo(STREAK_SATS_ADDRESS, true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const pillContract = getContract(PILL_TOKEN_ADDRESS, PILL_TOKEN_ABI, provider, NETWORK, senderInfo) as any;
-        const allowRes     = await pillContract.allowance(senderInfo, streakInfo);
-        const allowance    = BigInt(allowRes?.properties?.remaining ?? allowRes?.remaining ?? 0n);
-        const MAX_U256     = (1n << 256n) - 1n;
+
+        const readAllowance = async (): Promise<bigint> => {
+            const res = await pillContract.allowance(senderInfo, streakInfo);
+            return BigInt(res?.properties?.remaining ?? res?.remaining ?? 0n);
+        };
+
+        const allowance = await readAllowance();
+        const MAX_U256  = (1n << 256n) - 1n;
         if (allowance >= amount) return;
+
         const delta = MAX_U256 - allowance;
         setMining('Approving PILL');
         const approveSim = await pillContract.increaseAllowance(streakInfo, delta);
         const txId = await sendTx(approveSim as Parameters<typeof sendTx>[0], address);
-        addToast('PILL approved', 'success', txId);
+        addToast('PILL approved — waiting for confirmation…', 'success', txId);
+
+        // Poll until allowance is confirmed on-chain (up to ~5 min)
+        setMining('Waiting for approval confirmation');
+        for (let i = 0; i < 20; i++) {
+            await new Promise(r => setTimeout(r, 15_000));
+            const updated = await readAllowance();
+            if (updated >= amount) return;
+        }
+        throw new Error('Approval not confirmed after 5 minutes — please try again');
     };
 
     const handleCreate = async () => {
