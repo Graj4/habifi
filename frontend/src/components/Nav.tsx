@@ -7,7 +7,6 @@ const NAV_ITEMS = [
     { id: 'leaderboard', label: 'Leaderboard' },
     { id: 'challenge',   label: 'Challenge'   },
     { id: 'badges',      label: 'Badges'      },
-    { id: 'admin',       label: 'Setup'       },
 ] as const;
 
 export default function Nav() {
