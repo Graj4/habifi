@@ -578,7 +578,21 @@ export default function GroupHabits() {
                                     addToast('Link copied — share it!', 'success');
                                 }}
                             >
-                                🔗 Share Pool
+                                🔗 Copy Link
+                            </button>
+                            <button
+                                className="btn btn-ghost btn-sm"
+                                style={{ color: '#1DA1F2' }}
+                                onClick={() => {
+                                    const url = `${window.location.origin}/?group=${selectedGroup.id}`;
+                                    const pool = formatPill(selectedGroup.totalPool);
+                                    const freq = freqLabel(selectedGroup.frequency).toLowerCase();
+                                    const dur  = durationLabel(selectedGroup.duration);
+                                    const text = `I just joined a ${freq} habit pool on Bitcoin L1 🔥\n\n"${selectedGroup.name}" — ${dur} challenge\nPrize pot: ${pool}\nLast ones standing split it all.\n\nJoin me 👇\n${url}\n\n#Bitcoin #HabiFi #OPNet`;
+                                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+                                }}
+                            >
+                                𝕏 Tweet
                             </button>
                             {selectedGroup.status === GROUP_OPEN && (
                                 <button className="btn btn-primary" onClick={() => handleJoin(selectedGroup)}>
