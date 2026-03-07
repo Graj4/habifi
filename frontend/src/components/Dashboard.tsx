@@ -220,7 +220,7 @@ function CoachTip({ bestStreak }: { bestStreak: number }) {
             <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>🤖</span>
             <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                    AI Coach
+                    AI HabiFi Coach
                 </div>
                 <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6 }}>
                     {tip}
