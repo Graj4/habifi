@@ -51,7 +51,11 @@ export const useApp = () => useContext(AppContext);
 interface Toast { id: number; msg: string; type: 'success' | 'error'; txId?: string; }
 
 export default function App() {
-    const [page, setPage] = useState('home');
+    const [page, setPage] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('group')) return 'groups';
+        return 'home';
+    });
     const [toasts, setToasts] = useState<Toast[]>([]);
     const [selectedHabit,    setSelectedHabit]    = useState<HabitInfo | null>(null);
     const [selectedHabitIdx, setSelectedHabitIdx] = useState(0);

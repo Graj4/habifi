@@ -199,6 +199,15 @@ export default function GroupHabits() {
     const mountedRef = useRef(true);
     useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; }; }, []);
 
+    // ── Deep-link: auto-open group from ?group=ID in URL ───────────────────────
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const groupParam = params.get('group');
+        if (groupParam) {
+            try { setSelectedId(BigInt(groupParam)); } catch { /* invalid id */ }
+        }
+    }, []);
+
     // ── Browse: load group list ─────────────────────────────────────────────────
     const loadGroups = useCallback(async () => {
         setLoadingList(true);
@@ -561,6 +570,16 @@ export default function GroupHabits() {
 
                         {/* Action buttons */}
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                            <button
+                                className="btn btn-ghost btn-sm"
+                                onClick={() => {
+                                    const url = `${window.location.origin}/?group=${selectedGroup.id}`;
+                                    navigator.clipboard.writeText(url);
+                                    addToast('Link copied — share it!', 'success');
+                                }}
+                            >
+                                🔗 Share Pool
+                            </button>
                             {selectedGroup.status === GROUP_OPEN && (
                                 <button className="btn btn-primary" onClick={() => handleJoin(selectedGroup)}>
                                     Join ({formatPill(selectedGroup.minStake)})
