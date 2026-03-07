@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { getContract, JSONRpcProvider } from 'opnet';
 import { useApp } from '../App';
 import { useUserHabits, useMotoMiles, usePendingYield, useCurrentBlock, sendTx, type HabitInfo } from '../lib/hooks';
@@ -160,6 +160,90 @@ function blocksToTimeAgo(blocksAgo: number): string {
     if (mins < 60)   return `${mins}m ago`;
     if (mins < 1440) return `${Math.floor(mins / 60)}h ago`;
     return `${Math.floor(mins / 1440)}d ago`;
+}
+
+// ─── Coach Tips ───────────────────────────────────────────────────────────────
+const TIPS_BEGINNER = [
+    "Every Bitcoin block is ~10 minutes — your first check-in is block zero. The chain starts now.",
+    "You don't need motivation, you need a system. Stake your PILL and let skin-in-the-game do the work.",
+    "The hardest streak is day 1. You've already passed the most dangerous block.",
+    "Satoshi didn't build Bitcoin in a day — but he showed up every day. So can you.",
+    "A habit without accountability is just a wish. Your staked PILL is your proof of commitment.",
+];
+
+const TIPS_BUILDING = [
+    "You're past the 'just started' phase. This is where most people quit — don't be most people.",
+    "Compound interest works on habits too. Each check-in multiplies the next one's power.",
+    "Your streak is a Bitcoin transaction — once confirmed enough times, it's irreversible identity.",
+    "Low time preference isn't just for HODLing. Apply it to your habits and watch the gains compound.",
+    "7 days in: your brain is starting to wire this as default behavior. Keep the pressure on.",
+];
+
+const TIPS_CONSISTENT = [
+    "30 days means your habit is no longer a choice — it's infrastructure. Protect it like your seed phrase.",
+    "You've outlasted 90% of people who start habits. The leaderboard is yours to take.",
+    "At this streak length, missing a day costs more than the penalty. Your identity is at stake.",
+    "Proof of work isn't just a consensus mechanism — it's what you're doing every single day.",
+    "You're not just building a habit. You're building the person who has that habit. Keep going.",
+];
+
+const TIPS_ELITE = [
+    "100 days. Most people set goals, you build systems. That's the difference between dreamers and builders.",
+    "Your streak is on-chain, immutable, and undeniable. This is what Bitcoin-native accountability looks like.",
+    "At this level, you're not fighting resistance — you're leading from the front. Others will follow.",
+    "You've earned the legend badge. Now the question is: how far past 100 can you go?",
+    "Elite streaks compound into elite character. Every check-in is a vote for the person you're becoming.",
+];
+
+function CoachTip({ bestStreak }: { bestStreak: number }) {
+    const pool = bestStreak >= 100 ? TIPS_ELITE
+        : bestStreak >= 30 ? TIPS_CONSISTENT
+        : bestStreak >= 7  ? TIPS_BUILDING
+        : TIPS_BEGINNER;
+
+    const [idx, setIdx] = useState(() => Math.floor(Math.random() * pool.length));
+    const tip = useMemo(() => pool[idx], [pool, idx]);
+
+    const next = () => setIdx(i => (i + 1) % pool.length);
+
+    return (
+        <div style={{
+            background:   'linear-gradient(135deg, rgba(91,127,255,0.08), rgba(16,217,168,0.05))',
+            border:       '1px solid rgba(91,127,255,0.2)',
+            borderRadius: 12,
+            padding:      '16px 20px',
+            display:      'flex',
+            gap:          14,
+            alignItems:   'flex-start',
+            marginTop:    24,
+        }}>
+            <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>🤖</span>
+            <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                    AI Coach
+                </div>
+                <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6 }}>
+                    {tip}
+                </div>
+            </div>
+            <button
+                onClick={next}
+                title="New tip"
+                style={{
+                    background: 'none',
+                    border:     '1px solid var(--border2)',
+                    borderRadius: 8,
+                    cursor:     'pointer',
+                    color:      'var(--text-dim)',
+                    fontSize:   16,
+                    padding:    '4px 8px',
+                    flexShrink: 0,
+                }}
+            >
+                ↻
+            </button>
+        </div>
+    );
 }
 
 export default function Dashboard() {
@@ -325,6 +409,8 @@ export default function Dashboard() {
                     </button>
                 </div>
             </div>
+
+            <CoachTip bestStreak={habits.length > 0 ? Math.max(...habits.map(h => h.streak)) : 0} />
 
             {/* Active habit cards */}
             {habitsLoading ? (
