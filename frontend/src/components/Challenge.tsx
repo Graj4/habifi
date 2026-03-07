@@ -6,11 +6,6 @@ import { STREAK_SATS_ABI, PILL_TOKEN_ABI } from '../lib/abi';
 import { STREAK_SATS_ADDRESS, PILL_TOKEN_ADDRESS, NETWORK, RPC_URL, MIN_PILL_STAKE, PILL_DECIMALS_BN, formatPill, formatAddress } from '../lib/config';
 import { sendTx } from '../lib/hooks';
 
-const MULTIPLIER_INFO = [
-    { value: 1, label: '1×', desc: 'Standard challenge', color: 'var(--text-muted)' },
-    { value: 2, label: '2×', desc: 'Heated rivalry',     color: 'var(--orange)'    },
-    { value: 3, label: '3×', desc: 'Maximum pressure',   color: 'var(--red)'       },
-] as const;
 
 const MINING_QUIPS = [
     'Satoshi is reviewing your request…',
@@ -62,7 +57,7 @@ export default function Challenge() {
 
     // Send side
     const [friendAddr, setFriendAddr] = useState('');
-    const [multiplier, setMultiplier] = useState(2);
+    const multiplier = 1; // Accountability Pairs are always equal stakes
     const [baseInput,  setBaseInput]  = useState('1000');
     const [sending,    setSending]    = useState(false);
     const [sentId,     setSentId]     = useState<string | null>(null);
@@ -361,8 +356,8 @@ export default function Challenge() {
         return (
             <div className="container section" style={{ textAlign: 'center', maxWidth: 480 }}>
                 <div style={{ fontSize: 64, marginBottom: 16 }}>⚔️</div>
-                <h2 style={{ marginBottom: 12 }}>Challenge a Friend</h2>
-                <p style={{ marginBottom: 24 }}>Connect your wallet to send and accept streak challenges.</p>
+                <h2 style={{ marginBottom: 12 }}>Accountability Pairs</h2>
+                <p style={{ marginBottom: 24 }}>Connect your wallet to lock stakes with a rival and put skin in the game.</p>
                 <button className="btn btn-primary btn-lg" onClick={connectWallet}>Connect OP_WALLET</button>
             </div>
         );
@@ -370,20 +365,19 @@ export default function Challenge() {
 
     return (
         <div className="container section" style={{ maxWidth: 700 }}>
-            <h2 style={{ marginBottom: 8 }}>Challenge a Friend</h2>
+            <h2 style={{ marginBottom: 8 }}>⚔️ Accountability Pairs</h2>
             <p style={{ marginBottom: 32 }}>
-                Stake PILL against a friend at a multiplied rate. The accepted stake enters the
-                yield pool and is redistributed proportionally to all active stakers — including you,
-                if your streak holds.
+                Two wallets. Equal stakes. Same habit. Whoever breaks first feeds the yield pool —
+                and their rival earns it. Pure adversarial accountability on Bitcoin L1.
             </p>
 
             <div className="grid-2" style={{ gap: 24 }}>
-                {/* ── Send Challenge ── */}
+                {/* ── Send Pair Request ── */}
                 <div>
-                    <h3 style={{ marginBottom: 16, color: 'var(--primary)' }}>Send Challenge</h3>
+                    <h3 style={{ marginBottom: 16, color: 'var(--primary)' }}>Create a Pair</h3>
                     <div className="card">
                         <div className="form-group">
-                            <label>Friend's Bitcoin Address</label>
+                            <label>Rival's Bitcoin Address</label>
                             <input
                                 className="input mono"
                                 placeholder="bc1q... or opt1..."
@@ -393,35 +387,7 @@ export default function Challenge() {
                         </div>
 
                         <div className="form-group">
-                            <label>Stake Multiplier</label>
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                {MULTIPLIER_INFO.map(m => (
-                                    <button
-                                        key={m.value}
-                                        onClick={() => setMultiplier(m.value)}
-                                        style={{
-                                            flex:         1,
-                                            padding:      '12px 8px',
-                                            borderRadius: 'var(--radius)',
-                                            border:       `1px solid ${multiplier === m.value ? m.color : 'var(--border)'}`,
-                                            background:   multiplier === m.value ? `${m.color}20` : 'var(--bg3)',
-                                            color:        multiplier === m.value ? m.color : 'var(--text-muted)',
-                                            cursor:       'pointer',
-                                            fontWeight:   800,
-                                            fontSize:     18,
-                                            fontFamily:   'inherit',
-                                            textAlign:    'center',
-                                        }}
-                                    >
-                                        {m.label}
-                                        <div style={{ fontSize: 10, fontWeight: 400, marginTop: 4, opacity: 0.7 }}>{m.desc}</div>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Base Stake (PILL)</label>
+                            <label>Stake Amount (PILL) — each party locks this</label>
                             <input
                                 className="input"
                                 type="number"
@@ -434,8 +400,16 @@ export default function Challenge() {
 
                         <div style={{ background: 'var(--bg)', borderRadius: 'var(--radius)', padding: 14, marginBottom: 16, fontSize: 13 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                                <span style={{ color: 'var(--text-muted)' }}>Each party stakes</span>
-                                <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{formatPill(requiredStake)}</span>
+                                <span style={{ color: 'var(--text-muted)' }}>You lock</span>
+                                <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{formatPill(baseAmount)}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Rival locks</span>
+                                <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{formatPill(baseAmount)}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Total at stake</span>
+                                <span style={{ color: 'var(--orange)', fontWeight: 800 }}>{formatPill(baseAmount * 2n)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <span style={{ color: 'var(--text-muted)' }}>Expires after</span>
@@ -449,17 +423,17 @@ export default function Challenge() {
                             disabled={sending || !friendAddr.trim() || baseAmount < MIN_PILL_STAKE}
                         >
                             {sending
-                                ? <><span className="spinner" />Sending…</>
-                                : `⚔️ Send ${multiplier}× Challenge`}
+                                ? <><span className="spinner" />Locking stakes…</>
+                                : '⚔️ Send Pair Request'}
                         </button>
 
                         {sentId && (
                             <div style={{ marginTop: 14, padding: 12, background: 'rgba(34,197,94,0.08)', borderRadius: 'var(--radius)', border: '1px solid rgba(34,197,94,0.25)', fontSize: 13 }}>
-                                <div style={{ fontWeight: 700, color: 'var(--green)', marginBottom: 4 }}>✅ Challenge sent!</div>
+                                <div style={{ fontWeight: 700, color: 'var(--green)', marginBottom: 4 }}>⚔️ Pair request sent!</div>
                                 <div style={{ color: 'var(--text-muted)', marginBottom: 8 }}>
-                                    Share Challenge ID{' '}
+                                    Share Pair ID{' '}
                                     <strong className="mono" style={{ color: 'var(--orange)', fontSize: 15 }}>#{sentId}</strong>
-                                    {' '}with your friend — they can also see it automatically in the Accept panel.
+                                    {' '}with your rival — or they'll see it automatically in their incoming list.
                                 </div>
                                 <button
                                     className="btn btn-ghost btn-sm"
@@ -467,16 +441,16 @@ export default function Challenge() {
                                     disabled={cancelling === sentId}
                                     style={{ fontSize: 11 }}
                                 >
-                                    {cancelling === sentId ? <><span className="spinner" style={{ width: 12, height: 12 }} />Cancelling…</> : '✕ Cancel this challenge'}
+                                    {cancelling === sentId ? <><span className="spinner" style={{ width: 12, height: 12 }} />Cancelling…</> : '✕ Cancel pair request'}
                                 </button>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* ── Accept Challenge ── */}
+                {/* ── Accept Pair Request ── */}
                 <div>
-                    <h3 style={{ marginBottom: 16, color: 'var(--primary)' }}>Accept a Challenge</h3>
+                    <h3 style={{ marginBottom: 16, color: 'var(--primary)' }}>Accept a Pair Request</h3>
                     <div className="card" style={{ minHeight: 260 }}>
                         {mining ? (
                             <MiningScreen label="Mining your PILL approval" onCancel={cancelMining} />
@@ -492,10 +466,10 @@ export default function Challenge() {
                                     ✓
                                 </div>
                                 <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 6, color: 'var(--green)' }}>
-                                    Challenge accepted!
+                                    You're locked in. ⚔️
                                 </div>
                                 <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20, lineHeight: 1.6 }}>
-                                    Your PILL is locked on-chain. Here's what to do next to compete and earn yield.
+                                    Equal stakes locked on Bitcoin L1. Now commit to your habit — whoever blinks first loses.
                                 </div>
 
                                 <TxLinks txId={acceptedTxId} style={{ marginBottom: 20 }} />
@@ -504,7 +478,7 @@ export default function Challenge() {
                                     {[
                                         { n: '1', title: 'Create a habit', body: 'Go to "New Habit" and stake PILL on a habit you will commit to — this is your position in the competition.' },
                                         { n: '2', title: 'Check in every period', body: 'Hit Check In on your Dashboard within each window. Every check-in grows your streak and keeps you eligible for yield.' },
-                                        { n: '3', title: 'Earn if your streak holds', body: 'If your challenger breaks their streak first, their 10% penalty enters the pool and you earn proportionally to your PILL staked.' },
+                                        { n: '3', title: 'Outlast your rival', body: 'If your rival breaks first, their penalty enters the yield pool — and you earn it back proportionally. Hold longer, earn more.' },
                                     ].map(step => (
                                         <div key={step.n} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                                             <div style={{
@@ -559,7 +533,7 @@ export default function Challenge() {
                                 )}
 
                                 <div className="form-group">
-                                    <label>Challenge ID</label>
+                                    <label>Pair ID</label>
                                     <div style={{ position: 'relative' }}>
                                         <input
                                             className="input mono"
@@ -574,7 +548,7 @@ export default function Challenge() {
                                         )}
                                     </div>
                                     <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 6 }}>
-                                        Ask your challenger for their Challenge ID — details load automatically.
+                                        Ask your rival for the Pair ID — or pick from your incoming list above.
                                     </div>
                                 </div>
 
@@ -631,11 +605,11 @@ export default function Challenge() {
 
                     <div className="info-box" style={{ marginTop: 16, fontSize: 12, lineHeight: 1.7 }}>
                         <strong style={{ color: 'var(--text)', display: 'block', marginBottom: 6 }}>How it works</strong>
-                        1. Challenger issues → receives a Challenge ID<br />
-                        2. Recipient sees it automatically in the Incoming list above, or enter the ID manually<br />
-                        3. Accepting locks your PILL stake on-chain<br />
-                        4. Both parties create habits and compete — the accepted stake enters the yield pool, redistributed proportionally to all active PILL stakers<br /><br />
-                        Challenges expire after 48 hours (288 blocks). No penalty if expired.
+                        1. You send a pair request — your rival gets it automatically in their incoming list<br />
+                        2. They accept → both wallets lock equal PILL on Bitcoin L1<br />
+                        3. Both commit to the same habit and check in every period<br />
+                        4. Whoever breaks their streak first — their penalty enters the yield pool, earned back by whoever holds longest<br /><br />
+                        Pair requests expire after 48 hours (288 blocks). No penalty if expired.
                     </div>
                 </div>
             </div>

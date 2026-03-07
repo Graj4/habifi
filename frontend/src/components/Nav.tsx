@@ -2,9 +2,10 @@ import { useApp } from '../App';
 import { formatAddress } from '../lib/config';
 
 const NAV_ITEMS = [
+    { id: 'home',       label: 'Home'       },
     { id: 'community',  label: 'Community'  },
     { id: 'dashboard',  label: 'Dashboard'  },
-    { id: 'challenge',  label: 'Challenge'  },
+    { id: 'challenge',  label: 'Pairs'      },
     { id: 'groups',     label: 'Groups'     },
 ] as const;
 
